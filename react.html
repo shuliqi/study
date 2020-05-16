@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+  </head>
+
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+      // 构造函数组件
+      function GetName(props) {
+        return <div>{props.name}</div>;
+      }
+      //   class 关键字组件
+      class GetAge extends React.Component {
+        constructor(props) {
+          super(props);
+          const state = {
+            age: 12
+          };
+        }
+        componentDidMount() {
+          console.log("11111", this.refs.shuliqi);
+        }
+        render() {
+          const { name } = this.props;
+          return <div ref="shuliqi">我的名字是： {name}， 我的年龄是</div>;
+        }
+      }
+      const getinfoEle = <GetAge name="shuliqkjashdgjaksjk" />;
+      const element = <GetName name="shuloiqi" />;
+      ReactDOM.render(
+        <div>
+          {getinfoEle}
+          {element}
+        </div>,
+        document.getElementById("example")
+      );
+    </script>
+  </body>
+</html>
