@@ -25,9 +25,9 @@ box-sizing: content-box(加上padding和border，content不会减少)，border-b
 * text-decoration：
 
   * underline(文本下定义一条线)
-  *  overline(文本上定义一条线)
+  * overline(文本上定义一条线)
   * line-through(穿过文本的一条线)
-  *  blink(定义闪烁的文本
+  * blink(定义闪烁的文本
 
 * text-shadow(h-shadow, v-shadow, blur, color)
 
@@ -94,7 +94,7 @@ box-sizing: content-box(加上padding和border，content不会减少)，border-b
 
   * 动画曲线：linear（匀速）， ease（低速开始，然后加快，然后放慢结束），ease-in（低速开始），ease-out低速结束）， ease-in-out(低速开始和结束)
   * 是否反方向： alternate 反方向 normal(默认值)
-  
+
   ```
   .box {
      animation:mymove 5s infinite;
@@ -142,15 +142,16 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 * BFC区域的元素不会与浮动的元素重叠在一起
 * b f c 计算高度的时候， 浮动元素的高度也需要计算进去
 * Bfs 是一个独立的渲染空间，不会影响到外部
+* ‘
 
 ##### BFC的应用
 
 * 防止margin重叠
 
   [防止margin重叠](https://codepen.io/shuliqi/pen/bGVaRVy)
-  
+
   由于b f cd的第二条规则： 会导致同一个bfc的margin重叠。但是不同的bfc 不会重叠，所以解决的办法就是另一个box 用一个b f c 包起来。
-  
+
   ```html
   <!DOCTYPE html>
   <html lang="en">
@@ -178,11 +179,11 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
       <p>看看我的 margin是多少</p>
     <p>看看我的 margin是多少</p>
   </body>
-</html>
+  </html>
   ```
-  
+
   效果是这样的
-  
+
   ![image-20200208233305675](/Users/shuliqi/Library/Application Support/typora-user-images/image-20200208233305675.png)
 
 
@@ -240,11 +241,11 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
   由于b f c的第二条规则,
 
   b f c 里面有一规定： 就是b f c 里面的元素的左边都紧紧挨着b f c的左边， 即使是浮动的元素。
-  
+
   所以在左左边固定并且float： left， 右边自适应的时候， 右边的也是紧挨着b f c的左边。所以不能实现，但是b f c 里面也还有一条，bfc 不会与浮动元素重叠。 所以我们只需要把右右边的box设置成b f c 就可以了。
-  
+
   [左边固定， 右边自适应的例子](https://codepen.io/shuliqi/pen/rNOpwjj) 
-  
+
   ```html
   <!DOCTYPE html>
   <html lang="en">
@@ -282,15 +283,15 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
           font-size: 40px;
       }
   </style>
-<body>
+  <body>
       <div class="left">LEFT</div>
     <div class="right">RIGHT</div>
   </body>
   </html>
   ```
-  
+
   效果如图
-  
+
   ![image-20200209000225092](/Users/shuliqi/Library/Application Support/typora-user-images/image-20200209000225092.png)
 
 又因为第三条规则。b f c 不会与浮动元素重叠
@@ -349,14 +350,14 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 
 
 
-*  清除浮动
+* 清除浮动
 
   当一个父级不设置高度， 里面的元素有浮动， 那么就有父级高度塌陷的结果. 但是如果这个父级一个b f c。 bfc 里面有一条规则就是 算父级的高度， 需要把浮动元素的高度算上
 
   所以解决的办法就是： 给父级设置为一个bfc。
-  
+
   [清除浮动的方法](https://codepen.io/shuliqi/pen/QWjagMb)
-  
+
   ```html
   <!DOCTYPE html>
   <html lang="en">
@@ -384,17 +385,17 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
           <div class="child"></div>
           <div class="child"></div>
       </div>
-</body>
+  </body>
   </html>
-
+  
   ```
 
   ![image-20200209000554640](/Users/shuliqi/Library/Application Support/typora-user-images/image-20200209000554640.png)
 
   由于 b f c 计算高度的时候， 浮动元素的高度也需要计算进去
-  
+
   所以我们可以设置父级的元素为一个bfc
-  
+
   ```html
   <!DOCTYPE html>
   <html lang="en">
@@ -424,11 +425,11 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
           <div class="child"></div>
     </div>
   </body>
-</html>
+  </html>
   ```
+
   
-  
-  
+
   ![image-20200209000645044](/Users/shuliqi/Library/Application Support/typora-user-images/image-20200209000645044.png)
 
 ### 5.块级元素
@@ -485,7 +486,7 @@ display: inline-block;
 }
 ```
 
-##### 容器的属性
+也就是说在一个连接里面， 可以发多个请求。
 
 * flex-direction:  设置主轴
 
@@ -502,7 +503,7 @@ display: inline-block;
   flex-start, flex-end, center, space-bettween, space-around;
 
 
-*  align-items: 设置交叉轴的对齐方式
+* align-items: 设置交叉轴的对齐方式
 
   flex-start， flex-end，center， baseline，stretch
 
@@ -547,7 +548,7 @@ display: inline-block;
   }
   ```
 
-*  块级元素 行内元素都有用：[flex布局](https://codepen.io/shuliqi/pen/abvEyge)
+* 块级元素 行内元素都有用：[flex布局](https://codepen.io/shuliqi/pen/abvEyge)
 
   ```
   .con {
@@ -747,6 +748,7 @@ display: inline-block;
 
 <!docTYPE> 在html 标签的前面。用来表明web浏览器该使用哪个版本的html来编写指令，然后浏览器才知道用哪个规范来解析。
 
+
 ### 15 em, rem, px
 
 px 绝对的像素
@@ -761,5 +763,19 @@ rem: 相对于根元素的font-size 浏览器默认fot-size：16px 1rem = 16px
 
 
 
+#### 17. position
 
+* absolute：  生成绝对定位，以非static定位的第一个元素进行定位的， left，top
+* fixed： 生成绝对定位，按照浏览器窗口来定位的 left，top
+* relative： 生成相对定位，根据正常的定位的来定位的 left，top
+* static： 没有定位， 以正常的流来布局
+
+#### 19. 左边固定， 右边自适应
+
+[float实现](https://codepen.io/shuliqi/pen/JjYmVZd)
+[绝对定位](https://codepen.io/shuliqi/pen/dyYgLjX)
+
+[b f c实现](https://codepen.io/shuliqi/pen/VwvENGm)
+
+[flex](https://codepen.io/shuliqi/pen/BaoqEPJ)
 

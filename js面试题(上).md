@@ -918,29 +918,35 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   ##### bind 的实现
 
   ```javascript
-  Function.prototype.myBind = function(thisObj, ...args1) {
-    if (typeof this !== 'function') {
-      throw new Error("错误");
-    }
-    const _this = this;
-    return function F(...args2) {
-      // 如果是构造函数
-      if (this instanceof F) {
-        return _this(...args1,..args2)
-      } else {
-        return _this.apply(thisObj, args1.concat(args2))
+    Function.prototype.myBind = function (thisObj, ...args1) {
+      if (typeof this !== "function") {
+        throw Error("调用的应该是一个函数");
       }
-    }
-  }
-   const obj = {
+      const _this = this;
+      function Fn() {}
+      Fn.prototype = this.prototype;
+      let bound = function (...args2) {
+        _this.apply(this instanceof Fn ? this : thisObj, args1.concat(args2));
+      };
+      bound.prototype = new Fn();
+      return bound;
+    };
+    const obj = {
       name: "shuliqi",
     };
-    function getPerosion(age1, age2) {
-      console.log(this.name, age1, age2);
-    }
-    const shu = getPerosion.myBind(obj, 12, 13); // shuliqi 12 13
+    function test(name) {
+      console.log("my is name:", this.name);
+      this.age = 12;
+      this.getPerson = function () {
+        console.log(name, this.age);
+      };
+  }
+    const newTest = test.myBind(obj, "shuliqi");
+    newTest(); // my is test
+    const myNewTest = new newTest();
+    myNewTest.getPerson(); // shuliqi 12
   ```
-
+  
   
 
 ###  20.什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和
@@ -1124,6 +1130,8 @@ console.log(person instanceof parent); // true
 
 ### 23. promise
 
+[Promise](https://shuliqi.github.io/2018/03/20/ES6%E5%AD%A6%E4%B9%A0-Promise/)
+
 ### 24.加载
 
 #### 异步加载js的方法
@@ -1279,7 +1287,7 @@ two 元素即绑定了冒泡 也绑定了捕获。
 
 **mouseenter :**鼠标移除本身元素触发， 不存在冒泡过程， 对应的取消事件是mouseleave
 
-
+ 
 
 #### 事件委托（事件代理）
 
@@ -1639,16 +1647,15 @@ eval()方法就是解析并且执行js字符串
 ### 32 new 操作符都干了什么
 
 1. 创建一个新的函数
-2. 将构造函数的作用域指向新的函数（将this值指向新的函数）
-3. 自执行构造函数的代码（是为了把属性和方法给新的函数）
+2. 将构造函数的作用域指向新的函数（将this值指向新的函数）fn__proto__ = Fn.prototype
+3. 自执行构造函数的代码（是为了把属性和方法给新的函数）call(). apply方式
 4. 返回新的函数
-5. 将构造函数的prototype与新函数的_proto 关联起来
 
 ### 33 数组去重
 
 **includes方式**
 
-```
+```javascript
 
 function unique(arr) {
   const result = [];

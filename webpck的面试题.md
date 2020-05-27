@@ -21,7 +21,7 @@
 
 ### 3. .有哪些常见的Loader？他们是解决什么问题的？
 
-* image-loader： 对图片进行压缩
+* image-webpack-loader： 对图片进行压缩
 * source-map-loader： 在soure-map 添加文件的，便于断点调试
 * babel-loader: 将ES6 转 成ES5 语法 的
 * eslint-loader: 通过ESlint检查j s代码

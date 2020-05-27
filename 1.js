@@ -832,3 +832,323 @@ function phone(str) {
   return phoneArr.join("");
 }
 console.log(phone(17885251632));
+
+{
+  Function.prototype.myCall = function (thisObj, ...args) {
+    if (typeof this !== "function") {
+      throw Error("调用的必须是一个函数");
+    }
+    const addFn = Symbol();
+    thisObj[addFn] = this;
+    thisObj[addFn](...args);
+    delete thisObj[addFn];
+  };
+  const obj = {
+    name: "shuliqi",
+  };
+  function test(age) {
+    console.log(this.name, age);
+  }
+  test.myCall(obj, "122");
+}
+
+{
+  Function.prototype.myApply = function (thisObj, args) {
+    if (typeof this !== "function") {
+      throw Error("调用的必须是一个函数");
+    }
+    const addFn = Symbol();
+    thisObj[addFn] = this;
+    thisObj[addFn](args);
+    delete thisObj[addFn];
+  };
+  const obj = {
+    name: "shuliqi",
+  };
+  function test(age) {
+    console.log(this.name, age);
+  }
+  test.myApply(obj, [111, 123]);
+}
+
+{
+  Function.prototype.myBind = function (thisObj, ...args1) {
+    if (typeof this !== "function") {
+      throw Error("调用的应该是一个函数");
+    }
+    const _this = this;
+    function Fn() {}
+    Fn.prototype = this.prototype;
+    let bound = function (...args2) {
+      _this.apply(this instanceof Fn ? this : thisObj, args1.concat(args2));
+    };
+    bound.prototype = new Fn();
+    return bound;
+  };
+  const obj = {
+    name: "shuliqi",
+  };
+  function test(name) {
+    console.log("my is name:", this.name);
+    this.age = 12;
+    this.getPerson = function () {
+      console.log(name, this.age);
+    };
+  }
+  const newTest = test.myBind(obj, "shuliqi");
+  newTest(); // my is test
+  const myNewTest = new newTest();
+  myNewTest.getPerson(); // shuliqi 12
+}
+
+const ajax = function (method, url, data) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          return resolve(xhr.responseText);
+        }
+        if (xhr.status === 404) {
+          return reject(xhr.status);
+        }
+      }
+    };
+    xhr.open(method, url);
+    xhr.send(data);
+  });
+};
+
+{
+  const obj = {
+    name: "shuliqi",
+    age: 12,
+  };
+  Object.defineProperty(obj, "name", {
+    get() {
+      console.log("get");
+    },
+    set() {
+      console.log("set");
+    },
+  });
+  obj.name = "ahah ";
+  console.log(obj.name);
+}
+{
+  const obj = { name: "shuliqi" };
+  const proxy = new Proxy(obj, {
+    get(target, key, proxy) {
+      console.log(target, key);
+    },
+    set(target, key, value, proxy) {
+      console.log(target, key, value);
+    },
+  });
+  proxy.name = "hahah";
+  console.log(proxy.name);
+}
+
+{
+  const person = function () {
+    name = "shuliqi";
+  };
+  const myPerson = new person();
+  console.log(myPerson.name);
+}
+
+{
+  //  数组去重
+  function unique(arr) {
+    return [...new Set(arr)];
+  }
+  console.log(unique([1, 1, "1", 2]));
+}
+{
+  //  数组去重
+  function unique(arr) {
+    const map = new Map();
+    return arr.filter((a) => {
+      if (!map.has(a)) {
+        return map.set(a, "1");
+      }
+    });
+  }
+  console.log(unique([1, 1, "1", 2]));
+}
+
+{
+  // 数组展开
+  function flatArr(arr) {
+    return arr.flat(Infinity);
+  }
+  console.log(flatArr([1, 2, [3, [4, 5]], 6, [7, 8, [9]]]));
+}
+
+{
+  // 数组展开
+  function flatArr(arr) {
+    let result = [];
+    arr.forEach((a) => {
+      if (Array.isArray(a)) {
+        result = result.concat(flatArr(a));
+      } else {
+        result = result.concat(a);
+      }
+    });
+    return result;
+  }
+  console.log(flatArr([1, 2, [3, [4, 5]], 6, [7, 8, [9]]]));
+}
+
+{
+  {
+    // 数组展开
+    function flatArr(arr) {
+      while (arr.some((a) => Array.isArray(a))) {
+        arr = [].concat(...arr);
+      }
+      return arr;
+    }
+    console.log(flatArr([1, 2, [3, [4, 5]], 6, [7, 8, [9]]]));
+  }
+}
+
+{
+  {
+    // 数组展开
+    function flatArr(arr) {
+      return arr.reduce((pre, next) => {
+        return pre.concat(Array.isArray(next) ? flatArr(next) : next);
+      }, []);
+    }
+    console.log(flatArr([1, 2, [3, [4, 5]], 6, [7, 8, [9]]]));
+  }
+}
+const once = function (fn) {
+  let once = false;
+  return () => {
+    if (!once) {
+      once = true;
+      fn.call(null);
+    }
+  };
+};
+const test = function () {
+  console.log("aaa");
+};
+const shu = once(test);
+shu();
+shu();
+
+{
+  function sleep(time) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("我完成了");
+      }, time);
+    });
+  }
+  sleep(1000).then((data) => {
+    console.log(data);
+  });
+}
+{
+  {
+    function sleep(time) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, time);
+      });
+    }
+  }
+  async function test() {
+    await sleep(1000);
+    console.log("完成了");
+  }
+  test();
+}
+
+{
+  function* sleep(time) {
+    yield new Promise((resolve, reject) => {
+      setTimeout(resolve, time);
+    });
+  }
+  sleep(1000)
+    .next()
+    .value.then(() => {
+      console.log("我完好吃呢个了");
+    });
+}
+
+console.log("1");
+setTimeout(function () {
+  console.log("2");
+});
+console.log("3");
+
+// 1 3 2
+
+process.nextTick(function () {
+  console.log("1");
+});
+
+new Promise(function (resolve) {
+  console.log("2");
+  resolve();
+}).then(function () {
+  console.log("3");
+  setTimeout(function () {
+    console.log("4");
+  });
+});
+
+new Promise(function (resolve) {
+  setTimeout(function () {
+    console.log("6");
+  });
+  resolve();
+}).then(function () {
+  setTimeout(function () {
+    console.log("7");
+    new Promise(function (resolve) {
+      setTimeout(function () {
+        console.log("8");
+      });
+      resolve();
+    }).then(function () {
+      setTimeout(function () {
+        console.log("9");
+      });
+    });
+  });
+});
+console.log("10");
+
+{
+  function f() {
+    setTimeout(() => {
+      console.log(5);
+      Promise.resolve().then(() => {
+        console.log(6);
+      });
+    });
+
+    new Promise((resolve, reject) => {
+      console.log(1);
+      resolve(1);
+    }).then(() => {
+      console.log(2);
+      Promise.resolve().then(() => {
+        console.log(3);
+      });
+      setTimeout(() => {
+        console.log(4);
+      });
+      Promise.resolve().then(() => {
+        console.log(7);
+      });
+    });
+  }
+  f();
+}
