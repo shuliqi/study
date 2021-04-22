@@ -20,6 +20,8 @@ symbol 是ES6 新加的一种新的基本数据类型。 表示独一无二的�
 
 [6SESymbol](https://es6.ruanyifeng.com/?search=rest&x=0&y=0#docs/symbol)
 
+
+
 ### 3. 复杂(引用)数据有哪几种？
 
 引用数据类型：`Function`, `Object`, `Array`, `Date`
@@ -114,31 +116,39 @@ console.log(date instanceof Date) // // true
 
 const obj1 = new Object({ shu: 'asa' });
 console.log(obj1 instanceof Object)  // true
+
 const obj2 = { age: 12 };
 console.log(obj2 instanceof Object) // true
+
 const myFun1 = new Function();
 console.log(myFun1 instanceof Function) //  true
+
 const myFun2 = function() {};
 console.log(myFun2 instanceof Function) //  true
+
+
 ```
 
 * instanceof 的实现原理
 
 ```javascript
 // instanceof 的实现原理, A instanceof B
-function instanceOf(A, B) {
-    const O = B.prototype; // 取 B 的显性原型
-    let A  = A.__proto__; // 取 A 的隐形原型
-    while(true) {
-        if(A === null) { //已经找到顶层
-            return false;
-        }
-        if (A === O ) { //当 O 严格等于 L 时，返回 true
-            return true;
-        } 
-        A = A.__proto__; //继续向上一层原型链查找
+function  myInstanceof(A, B) {
+  const O = B.prototype; // 构造函数B的prototype属性
+  A = A.__proto__;       // 取 A 的隐形原型
+  while(true) {
+    if (A === 'null' ) {  //已经找到顶层
+      return false;
     }
+    if ( A === O) {  //当 O 严格等于 L 时，返回 true
+      return true;
+    }
+    A = A.__proto__;
+  }
 }
+
+const a = [1, 2];
+console.log(myInstanceof(a, Array ));  // true
 ```
 
 ### 7. for of , for in 和 forEach,map 的区别。
@@ -268,7 +278,7 @@ function instanceOf(A, B) {
 
 * 使用**Object.prototype.toString.call([1,2])**，如果返回”[object Array]“, 说明是数组。
 
-* 使用**constructor**如果 arr.cunstructor = Array，说明是数组。constructor属性返回构造该对象的数组函数的引用 注意：是很准确， 因为有时候我们可以设置一个对象的constructor属性
+* 使用**constructor**如果 arr.cunstructor = Array，说明是数组。constructor属性返回构造该对象的数组函数的引用 注意：不是很准确， 因为有时候我们可以设置一个对象的constructor属性
 
   ```javascript
   const arr = ['shu', 'li'];
@@ -432,7 +442,7 @@ function instanceOf(A, B) {
 
 Object.is 也不会进行类型的转换， 与 === 的区别是：
 
-```
+```javascript
 console.log(+0 === -0);// true
 console.log(Object.is(+0, -0)); // false
 console.log(NaN === NaN); // false
@@ -443,132 +453,334 @@ console.log(Object.is(NaN, NaN)); // true
 
 ### 11.ES6中的class和ES5的类有什么区别？
 
+https://shuliqi.github.io/shuliqi.github.io/2018/04/10/ES6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Class/
+
+测试掌握没
+
 ```javascript
 {
-// ES5 
-  function test(name, age) {
-    this.name = name;
-    this.age = age;
+
+  class People {
+    constructor() {
+      this.age = 38;
+    }
   }
-  test.prototype.getName = function() {
-    return this.name
+  class MyPeople extends People {
+    constructor() {
+      super();
+    }
+    static get() {
+      this.age = 10;
+      super.age = 20; 
+      console.log(super.age); 
+      console.log(this.age); 
+
+    }
   }
-  var myFun = new test("shuliqi", 12);
+  MyPeople.get();
+  MyPeople.age;
+
+
+
+
+
+
+
+
+  // undefined 20
+}
+
+
+
+{ 
+  class People {
+    constructor() {
+      this.age = 38;
+    }
+  }
+  People.sex = 30;
+
+  class MyPeople extends People {
+    constructor() {
+      super();
+      this.age = 10;
+      super.age = 20; 
+      console.log(super.age); 
+      console.log(this.age); 
+
+    }
+  }
+  const people = new MyPeople();
+
+
+
+
+
+
+  // undefined 20
+  // 原因：super.age 中的super是在普通方法中使用的，super指向分类的原型。父类的原型上没有age属性
+}
+
+
+{
+  class A {
+    p() {
+      return 2;
+    }
+  }
+  
+  class B extends A {
+    constructor() {
+      super();
+      console.log(super.p()); 
+    }
+  }
+  
+  let b = new B();
+  
+  
+  
+  // 2
 }
 
 {
-  // ES6
-  class test {
-    // 构造函数
-    constructor(name, age) {
-      this.name = name;
-      this.age = age
-    }
-    // 添加方法， 注意ES6的calss内部只能允许添加方法， 不允许添加属性
-    getName() {
-      return this.name;
+  class A {
+    constructor() {
+      this.p = 2;
     }
   }
-  const myFun = new test('shuloqo', 23);
+  
+  class B extends A {
+    get m() {
+      return super.p;
+    }
+  }
+  
+  let b = new B();
+  console.log(b.m) 
+
+  
+  
+  
+  
+  
+  // undefined
+}
+
+{
+  class Point {
+  }
+  class ColorPoint extends Point {
+  }
+  const shu = new ColorPoint()
+}
+
+
+{
+  class A {}
+  A.prototype.x = 2;
+  
+  class B extends A {
+    constructor() {
+      super();
+      console.log(super.x) 
+    }
+  }
+  
+  let b = new B();
+
+
+
+  // 2
+}
+
+
+
+{
+  class A {
+    constructor() {
+      this.x = 1;
+    }
+    print() {
+      console.log(this.x);
+    }
+  }
+  
+  class B extends A {
+    constructor() {
+      super();
+      this.x = 2;
+    }
+    m() {
+      super.print();
+    }
+  }
+  
+  let b = new B();
+  b.m()
+  
+  
+  
+  
+  // 2
+}
+
+
+{
+  class A {
+    constructor() {
+      this.x = 1;
+    }
+  }
+  
+  class B extends A {
+    constructor() {
+      super();
+      this.x = 2;
+      super.x = 3;
+      console.log(super.x);
+      console.log(this.x);
+    }
+  }
+  
+  let b = new B();
+
+
+
+
+   // undefined 3
+}
+
+
+{
+  class Parent {
+    static myMethod(msg) {
+      console.log('static', msg);
+    }
+  
+    myMethod(msg) {
+      console.log('instance', msg);
+    }
+  }
+  
+  class Child extends Parent {
+    static myMethod(msg) {
+      super.myMethod(msg);
+    }
+  
+    myMethod(msg) {
+      super.myMethod(msg);
+    }
+  }
+  
+  Child.myMethod(1);
+  
+  var child = new Child();
+  child.myMethod(2); 
+  
+
+
+
+
+
+   // static 1
+   // instance 2
+}
+
+
+
+
+{
+  class A {
+    constructor() {
+      this.x = 1;
+    }
+    static print() {
+      console.log(this.x);
+    }
+  }
+  
+  class B extends A {
+    constructor() {
+      super();
+      this.x = 2;
+    }
+    static m() {
+      super.print();
+    }
+  }
+  
+  B.x = 3;
+  B.m() 
+  
+  
+  
+  
+  // 3
+}
+
+
+
+{
+  class A {}
+
+  class B extends A {
+    constructor() {
+      super();
+      console.log(super); 
+    }
+  }
+
+
+
+
+
+  // 报错
+}
+
+
+
+{
+  class A {}
+
+  class B extends A {
+    constructor() {
+      super();
+      console.log(super.valueOf() instanceof B); 
+    }
+  }
+
+  let b = new B();
+
+
+
+
+
+  // true
+}
+
+
+
+{
+  var obj = {
+    toString() {
+      return "MyObject: " + super.toString();
+    }
+  };
+  
+  obj.toString(); 
+  
+  
+  
+  
+  
+  // MyObject: [object Object]
 }
 ```
 
-* ES6 calss 内部定义的所有方法都是不可枚举的。
 
-  ```javascript
-  {
-    // ES5 
-    function test(name, age) {
-      this.name = name;
-      this.age = age;
-    }
-    test1.prototype.getName = function() {
-      return this.name
-    }
-  	console.log(Object.keys(test.prototype))； // ["getName"]
-  }
-  
-  {
-    // ES6
-    class test {
-      // 构造函数
-      constructor(name, age) {
-        this.name = name;
-        this.age = age
-      }
-      // 添加方法， 注意ES6的calss内部只能允许添加方法， 不允许添加属性
-      getName() {
-        return this.name;
-      }
-    }
-    console.log(Object.keys(test.prototype)); // []
-  }
-  ```
 
-* ES6 calss 必须使用new 调用, 不使用会报错;
 
-  ```javascript
-  class test {
-    // ...
-  }
-  
-  // 报错
-  var point = test(2, 3);
-  
-  // 正确
-  var point = new test(2, 3);
-  ```
-
-* ES6 calss 不存在变量提升
-
-  ```javascript
-  new test(); // 报错， 类不存在变量提升（hoist），这一点与 ES5 完全不同
-  class test {};
-  
-  
-  // 不能提升的原因
-  {
-    let Foo = class {};
-    class Bar extends Foo {
-    }
-  }
-  //上面的代码不会报错，因为Bar继承Foo的时候，Foo已经有定义了。但是，如果存在class的提升，
-  // 上面代码就会报错，因为class会被提升到代码头部，而let命令是不提升的，所以导致Bar继承Foo的时候，Foo还没有定
-  ```
-
-* ES6 class 默认即是严格模式
-
-* ES6 class 子类必须在`constructor`方法中调用`super`方法，这样才有this对象;ES5中类继承的关系是相反的，先有子类的this，然后用父类的方法应用在this上。
-
-  ```javascript
-  {
-  	class test {
-  		constructor (name,age) {
-  			this.name = name;
-  			this.age = age;
-  		}
-  	}
-  	class test1 extends test {
-  		constructor () {}
-  	}
-  	myfun = new test1("shuliqi", 1); //  ReferenceError
-  }
-  
-  {
-  	class test {
-  		constructor (name,age) {
-  			this.name = name;
-  			this.age = age;
-  		}
-  	}
-  	class test1 extends test {
-  		constructor () {
-  			super(name, age)
-  		}
-  	}
-  	myfun = new test1("shuliqi", 1); //  不会报错
-  }
-  ```
 
 ### 12. 数组的哪些API会改变原数组？
 
@@ -762,7 +974,125 @@ console.log(Object.is(NaN, NaN)); // true
   }
   ```
 
-* 
+
+
+
+
+
+* 数组的方法
+
+  ```javascript
+  // join() ---> 不会改变
+  const arr = [1, 2, 3];
+  console.log(arr.join())
+  console.log(arr.join('-'))
+  console.log(arr); // 不会改变原数组
+  
+  const str = "1,2,3";
+  console.log(str.split(','))
+  
+  
+  // sort() 排序，默认是按字母表排序----会改变原数组
+  
+  const arr = [4, 1, 2, 3]
+  const result = arr.sort();
+  // console.log(arr, result);
+  // 从小到达排序
+  arr.sort((a, b) => a -b)
+  console.log(arr);
+  // 从大到小
+  arr.sort((a, b) => b - a)
+  console.log(arr);
+  // 不区分字母大小
+  const arr = ['f', 'G', 'B', 'a', 'C',];
+  arr.sort((a, b) => a.toLowerCase() > b.toLowerCase() ? 1 : -1)
+  console.log(arr);
+  
+  // reverse() 倒叙 ---> 会改变数组
+  const arr = [1,2,3];
+  arr.reverse();
+  console.log(arr)
+  
+  // [3,2,1]
+  
+  
+  // concat() ---> 链接数组-- > 不会改变原数组
+  const a1 = [1,2], a2 = [3,4,5];
+  const newArr = a1.concat(a2);
+  console.log(newArr, a1, a2);
+  
+  
+  // [1,2,3,4,5]   [1,2]  [3,4,5]
+  
+  
+  
+  // slice(index1, index2)// 返回数组的一个片段，第一个参数，起始下标
+  // 第二个参数，终止下标（但不包含改元素）。不会改变原数组
+  const a = [1,2,3,4,5,6];
+  const arr = a.slice(1,2);
+  console.log(a, arr);
+  
+  
+  // [1,2,3,4,5,6] [2]
+  
+  
+  
+  
+  
+  // splice(), 删除和添加元素，第一个参数，是删除元素的起始位置
+  // 第二个参数是删除的个数
+  // 之后的参数都是添加的元素。从删除的地方开始添加
+  // 返回被删除的元素的数组
+  // 会改变原数组
+  const a = [1,2,3,3,4];
+  const deletArr = a.splice(1,1,5,6,7);
+  console.log(deletArr);
+  console.log(a);     
+  
+  
+   // [2]  [1,5,6,7,3,3,4]
+  
+  
+  
+  
+  
+  // push()  像数组末尾添加元素，返回新新的数组的长度--改变原数组
+  const a = [1,2];
+  const lenth = a.push(3);
+  console.log(lenth);
+  console.log(a);
+  
+  // 3 [1,2,3]
+  
+  
+  
+          
+  // pop()； 数组的末尾删除一个元素，返回被删除的元素， 会改变原数组
+  const a = [1,2,3,4];
+  const del = a.pop();
+  console.log(a, del)
+  // [1,2,3] 4
+  
+  
+  // unshift() 向头部添加一个元素，返回数组的长度，会改变原数组
+  const a = [2,3,4];
+  const len = a.unshift(1);
+  console.log(a, len);
+  
+  // [1,2,3,4] 4
+  
+  
+  // shift() 头部删除一个元素， 返回删除的元素，会改变原数组
+  const a = [1,2,3];
+  const de = a.shift();
+  console.log(de, a);
+  // 1 [2,3]
+  
+  
+  // forEach() 编辑数组， 没有返回值，不改变原数组
+  ```
+
+  
 
 ### 13.let、const 以及 var 的区别是什么？
 
@@ -793,7 +1123,221 @@ typeof y; // 值是undefined,不会报错
 
 ### 15.如何正确的判断this? 箭头函数的this是什么？
 
-[https://shuliqi.github.io/2018/07/02/%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82this%E5%90%97/](https://shuliqi.github.io/2018/07/02/你真的懂this吗/)
+https://shuliqi.github.io/shuliqi.github.io/2018/07/02/%E5%85%B3%E4%BA%8Ethis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/
+
+**测试：**
+
+```javascript
+function getName() {
+    console.log(this.name)
+}
+var name = 'shuliqi';
+getName();
+
+
+
+//shuliqi
+```
+
+```javascript
+function getName() {
+    console.log(this.name)
+}
+var name = 'shuliqi';
+window.getName();
+
+
+// shuliqi
+```
+
+```javascript
+function getName() {
+    console.log(this.name)
+}
+var person = {
+    name:'shuliqi2222',
+    getName: getName,
+}
+var name = 'shuliqi11111';
+person.getName(); 
+
+
+// shuliqi2222
+```
+
+```javascript
+function getName() {
+    console.log(this.name)
+}
+var person1 = {
+    name:'shuliqi11111',
+    getName: getName,
+}
+var person2 = {
+    name:'shuliqi2222',
+    person: person1,
+}
+var name = 'shuliqi';
+person2.person.getName();
+
+
+
+
+// shuliqi11111
+```
+
+```javascript
+
+function getName() {
+    console.log(this.name)
+}
+var person1 = {
+    name:'shuliqi11111',
+    getName: getName,
+}
+var person2 = {
+    name:'shuliqi2222',
+    person: person1,
+}
+var name = 'shuliqi';
+var logName = person2.person.getName;
+logName();
+
+
+
+// shuliqi
+```
+
+```javascript
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person1 = {
+    name: 'YvetteLau',
+    sayHi: function(){
+        setTimeout(function(){
+            console.log('Hello,',this.name);
+        })
+    }
+}
+var person2 = {
+    name: 'Christina',
+    sayHi: sayHi
+}
+var name='Wiliam';
+person1.sayHi();
+setTimeout(person2.sayHi,100);
+setTimeout(function(){
+    person2.sayHi();
+},200);
+
+
+
+// Hello, Wiliam
+// Hello, Wiliam
+// Hello, Christina
+```
+
+````javascript
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person = {
+    name: 'YvetteLau',
+    sayHi: sayHi
+}
+var name = 'Wiliam';
+var Hi = person.sayHi;
+Hi.call(person);
+
+
+// Hello, YvetteLau
+````
+
+```javascript
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person = {
+    name: 'YvetteLau',
+    sayHi: sayHi
+}
+var name = 'Wiliam';
+var Hi = function(fn) {
+    fn();
+}
+Hi.call(person, person.sayHi);
+
+
+// Hello, Wiliam
+```
+
+````javascript
+
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person = {
+    name: 'YvetteLau',
+    sayHi: sayHi
+}
+var name = 'Wiliam';
+var Hi = function(fn) {
+    fn.call(this);
+}
+Hi.call(person, person.sayHi);
+
+
+// Hello, YvetteLau
+````
+
+```javascript
+function getName() {
+    console.log(this.name)
+}
+var person = {
+    name:'shuliqi11111',
+    getName: getName,
+}
+var hi = function(fn) {
+    fn()
+}
+var name = 'shuliqi'
+hi.call(null, person.getName);
+
+
+//  shuliqi
+```
+
+```javascript
+function Fn() {
+    this.name = "shuliqi";
+}
+var newFn = new Fn();
+console.log(newFn.name); 
+
+
+// shuliqi
+```
+
+````javascript
+var person = {
+    name:'shuliqi11111',
+    getName() {
+        var logName = () => {
+            console.log(this.name)
+        }
+        logName();
+    },
+}
+person.getName(); 
+
+// shuliqi11111
+````
+
+
+
+
 
 ### 16.词法作用域和this的区别
 
@@ -801,6 +1345,29 @@ typeof y; // 值是undefined,不会报错
 * this是在绑定的时候确定的。this指向什么，完全取决于函数在哪里调用。
 
 ### 17.谈谈你对JS执行上下文栈和作用域链的理解。
+
+**执行上下文：**执行上下文就是指js代码被解析和执行时所在的环境。
+
+**全局执行上下文** — 这是默认或者说基础的上下文，任何不在函数内部的代码都在全局上下文中。它会执行两件事：创建一个全局的 window 对象（浏览器的情况下），并且设置 `this` 的值等于这个全局对象。一个程序中只会有一个全局执行上下文。
+
+**函数执行上下文** — 每当一个函数被调用时, 都会为该函数创建一个新的上下文。每个函数都有它自己的执行上下文，不过是在函数被调用时创建的。函数上下文可以有任意多个。每当一个新的执行上下文被创建，它会按定义的顺序（将在后文讨论）执行一系列步骤。
+
+
+
+
+**执行栈：** 执行栈，也就是在其它编程语言中所说的“调用栈”，是一种拥有 LIFO（后进先出）数据结构的栈，被用来存储代码运行时创建的所有执行上下文。
+
+
+
+
+
+****
+
+-----
+
+
+
+---- 以下的重复了， 可以不看-----------
 
 执行上下文就是当前 JavaScript 代码被解析和执行时所在环境, JS执行上下文栈可以认为是一个存储函数调用的栈结构，遵循先进后出的原则。
 
@@ -814,6 +1381,8 @@ typeof y; // 值是undefined,不会报错
 
 注：如果查找的目的是对变量进行赋值，那么就会使用LHS 查询；如果目的是获取变量的值，就会使用RHS 查询
 
+
+
 ### 18.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？
 
 闭包就是能够访问其他函数内部变量的函数；j s语言特有的“链式作用作域“， 子级对象对一层一层的向上寻找父级的变量， 所以父级的变量子级都能访问， 反之，父级却不能访问到子级的变量。 那要是想要访问到怎么办呢？ 那就只能在子级里面在定一个函数， 然后return出来，那么 就可以访问了局部变量了。
@@ -821,9 +1390,211 @@ typeof y; // 值是undefined,不会报错
 * 闭包的优点：可以重复使用变量，并且不会造成变量污染，变量可以保持存在内存里面。
 * 闭包的缺点：占用很多的内存，会导致网页性能变差，在IE下容易造成内存泄露。在外面也能改父级的变量。
 
+##### 变量作用域
+
+变量的作用域分为**全局变量**和**局部变量**（函数内部变量）
+
+Javascript语言规定，函数内部可以直接读取全局变量。
+
+```javascript
+const name = "shuliqi";
+function getName() {
+  console.log(name);
+}
+getName();
+// shuliqi
+```
+
+在函数外部无法读取函数内部的变量。
+
+```javascript
+function setName() {
+   var name = 'shuliqi';
+}
+setName()
+console.log(name)
+// ReferenceError: name is not defined
+```
+
+**注意：**在函数内部声明的变量，需要使用var/const/let定义变量。不然的话，声明的将是一个全局变量
+
+```javascript
+function setName() {
+  name = 'shuliqi';
+}
+setName()
+console.log(name)
+// shuliqi
+```
+
+##### 如何从外部读取局部变量
+
+我们有时候需要得到函数内部的变量，但是正常情况下，是办不到的，只有通过变通的方式才能实现。
+
+实现的方式就是在函数的内部，在定义一个函数。
+
+```javascript
+function f1() {
+  var name = 'shuliqi';
+  function f2() {
+    console.log(name)
+  }
+}
+```
+
+上面的代码中，函数f2被包括在f1内部，f1内部的所有局部变量，对于f2都是可见的，但是反过来就不行，f2内部的局部变量对于f1都是不可见的。这就是Javascript语言特有的"链式作用域"结构（chain scope），子对象会一级一级地向上寻找所有父对象的变量。所以，父对象的所有变量，对子对象都是可见的，反之则不成立。
+
+
+
+既然f2 能可以读取f1的局部变量，那么只需要把f2作为返回值，不就可以访问了？
+
+```javascript
+function f1() {
+  var name = 'shuliqi';
+  function f2() {
+    console.log(name)
+  }
+  return f2;
+}
+f1()()
+
+
+// 或者
+
+
+function f1() {
+  var name = 'shuliqi';
+  function f2() {
+    console.log(name)
+  }
+  return f2();
+}
+f1()
+```
+
+##### 闭包的概念
+
+> 闭包就是能够读取其他函数内部变量的函数
+
+
+
+由于在Javascript语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成"定义在一个函数内部的函数"。
+
+所以，在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。
+
+##### 闭包的用途
+
+* 可以读取函数内部的变量
+
+* 内部变量能够始终保存在内存中
+
+  ```javascript
+  　　function f1(){
+    　　　　var n = 999;
+    　　　　nAdd = function() {
+                n += 1;
+           }
+    　　　　function f2 (){
+              console.log(n);
+    　　　　}
+    　　　　return f2;
+    　　}
+    
+    　　var result=f1();
+    
+    　　result(); // 999
+    
+    　　nAdd();
+    
+    　　result(); // 1000
+  ```
+
+  在这段代码中，result实际上就是闭包f2函数。它一共运行了两次，第一次的值是999，第二次的值是1000。这证明了，函数f1中的局部变量n一直保存在内存中，并没有在f1调用后被自动清除。
+
+  为什么会这样呢？原因就在于f1是f2的父函数，而f2被赋给了一个全局变量，这导致f2始终在内存中，而f2的存在依赖于f1，因此f1也始终在内存中，不会在调用结束后，被垃圾回收机制（garbage collection）回收。
+
+  这段代码中另一个值得注意的地方，就是"nAdd=function(){n+=1}"这一行，首先在nAdd前面没有使用var关键字，因此nAdd是一个全局变量，而不是局部变量。其次，nAdd的值是一个匿名函数（anonymous function），而这个匿名函数本身也是一个闭包，所以nAdd相当于是一个setter，可以在函数外部对函数内部的局部变量进行操作。
+
+##### 使用闭包注意的点
+
+- 由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。
+- 闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。
+
+##### 测试
+
+```javascript
+var name = "The Window";
+var object = {
+  name : "My Object",
+  getNameFunc : function(){
+    return function(){
+      return this.name;
+    };
+  }
+};
+console.log(object.getNameFunc()());
+```
+
+结果：The Window
+
+解析：object.getNameFunc() 其实就是一个函数，object.getNameFunc()()就是执行了这个函数，如：
+
+```javascript
+var name = "The Window";
+var object = {
+  name : "My Object",
+  getNameFunc : function(){
+    return function(){
+      return this.name;
+    };
+  }
+};
+const fun = object.getNameFunc();
+console.log(fun());
+```
+
+关于this的指向，这时候是的this是默认绑定方式，不懂this指向可以看 [this指向](https://shuliqi.github.io/shuliqi.github.io/2018/07/02/%E5%85%B3%E4%BA%8Ethis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/)。所以当前的this 指的是 windown
+
+```javascript
+var name = "The Window";
+var object = {
+  name : "My Object",
+  getNameFunc : function(){
+    var that = this;
+    return function(){
+      return that.name;
+    };
+  }
+};
+console.log(object.getNameFunc()());
+```
+
+结果： My Object
+
+解析：getNameFunc函数中的this是指向当前的object,被赋值给了getNameFunc函数中的局部变量that。getNameFunc函数返回了一个函数，形成了一个闭包，导致当前局部变量that一直记在内存中，没有被垃圾回收。 所有执行这个返回的函数的时候that局部变量就是当前的object对象，所以输出了object的那么属性。
+
+
+
+http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
+
 ### 19 谈谈原型链的理解
 
-Javascript 里面每一个对象都有自己的原型prototype， 这个原型里面有可以继承的的属性和方法。而且每一个对象都有自己的__proto__这个隐原型只想自己的原型（prototype）。而原型又有自己的隐原型，只想自己的原型。就这样一直向上查找，直到最后的原型的隐原型指向null。也就是达到了原型链的终点。
+**prototype：**每个对象都有prototype属性，指向它自己原型对象，而当前的对象又可以是别的对象的原型对象，而原型对象也是对象，也有自己的原型对象。
+
+![image-20210102002020202](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210102002020202.png)
+
+**__proto__:**每个对象都有__proto__属性，指向创建该对象的的构造函数原型。
+
+![image-20210102002315785](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210102002315785.png)
+
+**原型链：**    __proto__将对象与原型连接起来， 形成了原型链。所有的函数和对象沿着__proto__ 都能到达Function，Functiond的隐原型指向Funtion.prototype，Funtion.prototype的隐原型指向Object.prototype, Object.prototype的隐原型 指向null，也就到了原型链的终点。
+
+![image-20210102003326123](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210102003326123.png)
+
+
+
+
+https://juejin.cn/post/6844903936365690894
 
 ### 19.call、apply有什么区别？call,aplly和bind的内部是如何实现的？
 
@@ -884,10 +1655,40 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   
   ```
 
-  ##### apply的实现
+  https://www.jianshu.com/p/af945ea77b44
 
-  和call 实现的差不多， 只是传入的参数不同而已
-
+  ```javascript
+// 实现的原理
+  const obj = {
+    name: 'shuliqi',
+    getName: function() {
+      console.log(this.name); // shuliqi
+    }
+  }
+  obj.getName(); // this的指向是隐式指向， 指定调用它的函数
+  
+  
+  Function.prototype.MyCall = function(thisObj, ...args) {
+    const fn = Symbol('函的函数名'); // 为了防止与obj里面的函数重名
+    thisObj[fn] = this; // this就是指向当前调用MyCall方法的函数；
+    thisObj[fn](...args); // 调用call的时候是会立即调用的，所以执行
+    delete thisObj.fn; // 记得删除新家的函数
+  }
+  const obj = {
+    name: 'shuliqi'
+  }
+  function getName(age) {
+    console.log(this.name, age);
+  }
+  getName.MyCall(obj, 18)
+  ```
+  
+  
+  
+##### apply的实现
+  
+和call 实现的差不多， 只是传入的参数不同而已
+  
   ```javascript
   
     Function.prototype.myCall = function (thisObj, args) {
@@ -914,9 +1715,42 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   }
   
   ```
-
+  
+  https://www.jianshu.com/p/af945ea77b44
+  
+  
+  
+  ```javascript
+  
+  
+  Function.prototype.MyApply = function(thisObj, args) {
+    const fn = Symbol();
+    thisObj[fn] = this;  // this就是指向当前调用MyApply方法的函数；
+    thisObj[fn](...args) // 调用MyApply的时候是会立即调用的，所以执行
+    delete thisObj[fn];  // 记得删除新加的函数
+  }
+  
+  const obj = {
+    name: 'shuliqi'
+  }
+  function getName(age) {
+    console.log(this.name, age);
+  }
+  getName.MyApply(obj, [18])
+  ```
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   ##### bind 的实现
-
+  
   ```javascript
     Function.prototype.myBind = function (thisObj, ...args1) {
       if (typeof this !== "function") {
@@ -949,9 +1783,40 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   
   
 
+https://blog.csdn.net/tangzhl/article/details/79669461
+
+https://zhuanlan.zhihu.com/p/38968174
+
+```javascript
+Function.prototype.MyBind = function(thisObj, ...args) {
+  const _this = this;
+  const bound = function() {
+    _this.apply(this instanceof _this ? this:  thisObj, [...args, ...arguments])
+  }
+ // 每次绑定的时候，将绑定函数 fBound 的原型指向原函数的原型，如果 new 调用绑定函数，得到的实例的原型，也是原函数的原型。这样在 new 执行过程中，执行绑定函数的时候对 this 的判断就可以判断出是否是 new 操作符调用
+  bound.prototype = this.prototype;
+  return bound;
+}
+const obj = {
+  name: 'shuliqi',
+};
+function setName(name, sex) {
+  this.name = name;
+  this.sex = sex;
+}
+const test = setName.MyBind(obj, 'shuliqi');
+test('女');
+console.log(obj.name, obj.sex);
+
+const newObj = new test();
+console.log(newObj)
+```
+
+
+
 ###  20.什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是1,2,3之和
 
-https://shuliqi.github.io/archives/page/2/
+https://shuliqi.github.io/shuliqi.github.io/2018/10/05/%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96/
 
 
 
@@ -960,6 +1825,224 @@ https://shuliqi.github.io/archives/page/2/
 [https://shuliqi.github.io/2018/04/16/Debounce%E5%92%8CThrottle%E7%9A%84%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/](https://shuliqi.github.io/2018/04/16/Debounce和Throttle的原理及实现/)
 
 ### 22.继承
+
+最新的方法， 看这个即可：
+
+#### 原型链继承
+
+```javascript
+function People(name) {
+  // 父类实例属性
+  this.name = name;
+  // 父类实例方法
+  this.getName = function() {
+  console.log('父类实例的方法：', this.name)
+  }
+}
+// 父类原型属性
+People.prototype.age = 18;
+// 父类原型属方法
+People.prototype.getAge = function() {
+  console.log('父类原型方法', this.age);
+};
+
+
+/**  
+ * 原型链继承： 子类的原型指向父类的实例
+ */
+function MyPeople() {};
+MyPeople.prototype = new People('舒丽琦');
+
+// 测试
+const mypeople = new MyPeople();
+console.log('父类实例的属性：', mypeople.name);
+console.log('父类原型的属性：', mypeople.age);
+mypeople.getName();
+mypeople.getAge();
+// 父类实例的属性： 舒丽琦
+// 父类原型的属性： 18
+// 父类实例的方法： 舒丽琦
+// 父类原型方法 18
+```
+
+**优点：**
+
+* 父类实例和原型都继承到了。
+
+**缺点：**
+
+* 在创建子类实例的时候， 无法给父类传参
+* 子类的属性和方法只能在执行了构造函数(`MyPeople.prototype = new People('舒丽琦');`)之后才能创建；
+
+
+
+为了解决不能传参的缺点，可以有如下的继承
+
+####  构造函数继承
+
+```javascript
+function People(name) {
+  // 父类实例属性
+  this.name = name;
+  // 父类实例方法
+  this.getName = function() {
+  console.log('父类实例的方法：', this.name)
+  }
+}
+// 父类原型属性
+People.prototype.age = 18;
+// 父类原型属方法
+People.prototype.getAge = function() {
+  console.log('父类原型方法', this.age);
+};
+
+/** 
+ * 构造继承： 在子类的构造函数里面复制父类实例的属性和方法
+ */
+function MyPeople(name) {
+  // 可以向父类构造函数传参数
+  People.call(this, name)
+};
+// 测试
+const mypeople = new MyPeople('舒丽琦');
+console.log('父类实例的属性：', mypeople.name);
+console.log('父类原型的属性：', mypeople.age);
+mypeople.getName();
+mypeople.getAge();
+// 父类实例的属性： 舒丽琦
+// 父类原型的属性： undefined
+// 父类实例的方法： 舒丽琦
+// 父类原型方法 undefined
+```
+
+##### 优点：
+
+* 在创建子类实例的时候可以穿参数
+
+##### 缺点：
+
+* 不能继承父类原型的属性和方法
+
+
+
+#### 组合模式：
+
+这种方式可以解决不能传参和不能继承父类原型的属性和方法
+
+```javascript
+function People(name) {
+  // 父类实例属性
+  this.name = name;
+  // 父类实例方法
+  this.getName = function() {
+  console.log('父类实例的方法：', this.name)
+  }
+}
+// 父类原型属性
+People.prototype.age = 18;
+// 父类原型属方法
+People.prototype.getAge = function() {
+  console.log('父类原型方法', this.age);
+};
+
+
+/** 
+ * 组合模式： 原型链继承 + 苟晗函数继承
+ * 
+ * */
+
+ function MyPeople(name) {
+    People.call(this, name);
+ }
+ MyPeople.prototype = new People();
+
+// 测试
+const mypeople = new MyPeople('舒丽琦');
+console.log('父类实例的属性：', mypeople.name);
+console.log('父类原型的属性：', mypeople.age);
+mypeople.getName();
+mypeople.getAge();
+// 父类实例的属性： 舒丽琦
+// 父类原型的属性： 18
+// 父类实例的方法： 舒丽琦
+// 父类原型方法 18
+
+```
+
+##### 优点：
+
+* 既可以传参，父类原型和父类实例都可以继承
+
+##### 缺点：
+
+* 父类实例的属性和方法被实例化了两份（耗内存）
+
+
+
+#### 寄生组合方式
+
+```javascript
+/**  
+ * 寄生组合方式：为了解决父类实例实例化两份的
+ */
+
+ function MyPeople(name) {
+   People.call(this, name);
+ }
+(function() {
+  const fn = function() {};
+  fn.prototype = People.prototype;
+  MyPeople.prototype = new fn()
+})();
+// 测试
+const mypeople = new MyPeople('舒丽琦');
+console.log('父类实例的属性：', mypeople.name);
+console.log('父类原型的属性：', mypeople.age);
+mypeople.getName();
+mypeople.getAge();
+// 父类实例的属性： 舒丽琦
+// 父类原型的属性： 18
+// 父类实例的方法： 舒丽琦
+// 父类原型方法 18
+
+```
+
+
+
+#### 实例继承
+
+```javascript
+/** 
+ * 实例继承 
+ */
+function MyPeople (name) {
+  const instance = new People(name);
+  return instance;
+}
+// 测试
+const mypeople = new MyPeople('舒丽琦');
+console.log('父类实例的属性：', mypeople.name);
+console.log('父类原型的属性：', mypeople.age);
+mypeople.getName();
+mypeople.getAge();
+// 父类实例的属性： 舒丽琦
+// 父类原型的属性： 18
+// 父类实例的方法： 舒丽琦
+// 父类原型方法 18
+
+```
+
+缺点： 实例是父类的实例，不是子类的实例
+
+
+
+
+
+
+
+
+
+看以上方法即可
 
 #### 原型链继承：
 
@@ -1128,195 +2211,96 @@ console.log(person instanceof parent); // true
 
 　重点：就是给原型式继承外面套了个壳子。
 
-### 23. promise
 
-[Promise](https://shuliqi.github.io/2018/03/20/ES6%E5%AD%A6%E4%B9%A0-Promise/)
 
 ### 24.加载
 
 #### 异步加载js的方法
 
-1. **defer**:   defer 属性规定是否对脚本执行进行延迟，直到页面加载为止。只有ie支持
-
-   有的 js 脚本会用 document.write 方法来创建当前的文档内容，其他脚本就不一定是了
-
-   如果您的脚本不会改变文档的内容，可将 defer 属性加入到 <script> 标签中，
-
-   ```javascript
-   <script type="text/javascript" defer="defer">
-   </script>
-   ```
-
-2. **async**: html5的属性，属性规定一旦脚本可用，则会异步执行。async 属性仅适用于外部脚本（只有在使用 src 属性时）
-
-   ```javascript
-   <script type="text/javascript" src="demo_async.js" async="async"></script>
-   ```
-
-   
-
-注意：
-
-有多种执行外部脚本的方法：
-
-- 如果 async="async"：脚本相对于页面的其余部分异步地执行（当页面继续进行解析时，脚本将被执行）
-- 如果不使用 async 且 defer="defer"：脚本将在页面完成解析时执行
-- 如果既不使用 async 也不使用 defer：在浏览器继续解析页面之前，立即读取并执行脚本
-- 同时存在defer和async，那么defer的优先级比较高；脚本将在页面完成时执行。
-
-3. 动态加载js
-
-#### 图片的懒加载和预加载
-
-- 预加载：提前加载图片，当用户需要查看时可直接从本地缓存中渲染。
-- 懒加载：懒加载的主要目的是作为服务器前端的优化，减少请求数或延迟请求数。
-
-**两种技术的本质：两者的行为是相反的，一个是提前加载，一个是迟缓甚至不加载。懒加载对服务器前端有一定的缓解压力作用，预加载则会增加服务器前端压力。**
-
-### 25. 事件流
-
-**标准事件流：** 捕获事件（true）—目标事件—冒泡事件（false）
-
-**IE事件流：**冒泡事件
-
-**一个元素绑定了一个捕获事件，绑定了一个冒泡事件，执行几次？ 顺序？**
-
-```html
-<div id="one">
-  one
-  <div id="two">
-    two
-    <div id="three">
-      three
-      <div id="four">
-        four
-      </div>
-    </div>
-  </div>
-</div>
-```
-
-```javascript
-document.getElementById('one').addEventListener('click', function() {
-  console.log('one')
-}, true)
-document.getElementById('two').addEventListener('click', function() {
-  console.log('two 冒泡')
-}, false)
-document.getElementById('two').addEventListener('click', function() {
-  console.log('two 捕获')
-}, true)
-
-document.getElementById('three').addEventListener('click', function() {
-  console.log('three')
-}, true)
-document.getElementById('four').addEventListener('click', function() {
-  console.log('four')
-}, true)
-```
-
-two 元素即绑定了冒泡 也绑定了捕获。
-
-* 标准事件流
-
-如果是目标发生了事件：则目标元素先绑定了什么就先执行什么，其他元素是先捕获后冒泡
-
-如果不是目标事件发生了事件：则先执行捕获或执行冒泡
-
-例如：点击two： 输出：one , two 冒泡, two 捕获
-
-例如：点击four： 输出：one，two 捕获， three， four， two 冒泡
-
-* IE：后绑定的会覆盖钱绑定的事件
-
-[事件流的例子](https://codepen.io/shuliqi/pen/ZEbKjLm?editors=1010) 
-
-**IE与DOM事件的区别**
-
-* 事件流不一样：
-
-  DOM: 捕获事件（true）， 目标事件， 冒泡事件（false）
-
-  IE: 冒泡事件
-
-* 监听函数的参数不一致
-
-  DOM: addEventListener(type, fn, false/true)
-
-  IE: attachevent(type, fn)
-
-  type 表示事件类型， fn 表示事件触发的函数
-
-* this取值也不一致
-
-  DOM: 严格模式下（undefined）， 非严格模式（当前调用的对象）
-
-  IE: window
-
-* 取消冒泡不一致
-
-  DOM: e.stopPropagatioon()
-
-  IE: window.event.canceBubble = true
-
-* 取消默认行为
-
-  DOM: e.preventDefualt ()
-
-  IE: window.event.returnValue  = false
-
-* 获取事件源不一致
-
-  DOM: e.target
-
-  IE: window.event.srcElement
-
-
-
-#### 普通事件和事件绑定有什么区别？
-
-普通事件：只支持单一事件， 后面绑定的事件会覆盖当前的事件。
-
-事件绑定 ：支持绑定多个事件，不会被覆盖， 绑定几个就会有多少个？
-
-
-
-#### mouseover 和 mouseenter的区别
-
-**mouseover:** 鼠标移入某个元素或者某个元素的子元素都会触发，有冒泡的过程， 对应的取消事件是mouseout
-
-**mouseenter :**鼠标移除本身元素触发， 不存在冒泡过程， 对应的取消事件是mouseleave
-
- 
-
-#### 事件委托（事件代理）
-
-原理：利用冒泡原理，把事件加到父级上面， 让父级来执行
-
-好处：提高性能， 新增加的元素也会有该事件
-
-```html
-<ul id="ul">
-  <li>1</li>
-  <li>2</li>
-  <li>3</li>
-</ul>
-```
-
-```javascript
-document.getElementById('ul').addEventListener('click', function(e) {
-  const event = e || window.evebt;
-  const target = event.target || event.srcElemnt;
-  console.log(target.nodeName)
-  if (target.nodeName === 'LI') {
-    target.style.color = 'red';
-  }
-}, false)
-```
-
-#### 事件代理在捕获阶段的实际应用
-
-可以在父元素层面阻止事件向子元素传播，也可代替子元素执行某些操作。
+* defer属性
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <title></title>
+      <meta charset="UTF-8">
+  </head>
+  <script>
+      window.onload = function() {
+          console.log("window.onload");
+      }
+  </script>
+  <script src="https://shuliqi.github.io/xiaozhan/1.js" defer></script>
+  <script>
+      console.log("normal");
+  </script>
+  <body>
+  </body>
+  </html>
+  ```
+
+  normal，shuliqi，window.onload
+
+  
+
+  遇到有defer的script标签，浏览器会开一个新的线程去加载js，但是浏览器会继续解析和加载html，加载的js执行 会在window.on;oad
+
+  之前，其他没有defer属性的标签之后；
+
+* async属性
+
+  ```html
+  
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <title></title>
+      <meta charset="UTF-8">
+  </head>
+  <script>
+      window.onload = function() {
+          console.log("window.onload");
+      }
+  </script>
+  <script src="https://shuliqi.github.io/xiaozhan/1.js" async></script>
+  <script>
+      console.log("normal");
+  </script>
+  <body>
+  </body>
+  </html>
+  ```
+
+  和derfer 一样，也会开一个新的线程去下载， 但是不同的是， js 下载好了就会立刻执行， 不会等dom解析完之类的
+
+* 动态加载js： src赋值的时候，并不会去加载， 只有被添加的时候才会加载
+
+* 利用XHR异步加载js内容并执行
+
+  ```javascript
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <title></title>
+      <meta charset="UTF-8">
+  </head>
+  <script>
+      var xhr = new XMLHttpRequest();
+      xhr.open("get", "js/defer.js",true)
+      xhr.send();
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+              eval(xhr.responseText);
+          }
+      }
+  </script>
+  <body>
+  </body>
+  </html>
+  ```
+
+  
 
 
 
@@ -1650,6 +2634,19 @@ eval()方法就是解析并且执行js字符串
 2. 将构造函数的作用域指向新的函数（将this值指向新的函数）fn__proto__ = Fn.prototype
 3. 自执行构造函数的代码（是为了把属性和方法给新的函数）call(). apply方式
 4. 返回新的函数
+
+##### 首先先来明确一下步骤：
+
+1. 创建一个全新的空对象；
+2. 把这个对象内置的的原型引用指向到构造函数的prototype属性所引用的对象上；
+3. 将函数中的this对象指向这个全新的对象并且执行构造函数。
+4. 如果函数return出去的是一个引用类型的值，则返回这个值；否则就return这个全新的对象。
+
+##### 下面来举个例子说明一下
+
+假设我们要`let person = new Person()`，编译器首先会创建一个全新的空对象let person = {}，然后用person继承Person的原型链`person.__proto__ = Person.prototype`，再然后是将Person中的this指向这个全新的对象，并且执行构造函数中的代码，最后看函数如果return了其他值则直接return这个值，否则直接return这个全新的对象。
+
+
 
 ### 33 数组去重
 
@@ -2611,4 +3608,155 @@ console.log(str.toLowerCase()); // 123shuliq
 const str = "123shuliq";
 console.log(str.toUpperCase()); // 123SHULIQ
 ```
+
+
+
+
+
+
+
+### 25. 事件流
+
+**标准事件流：** 捕获事件（true）—目标事件—冒泡事件（false）
+
+**IE事件流：**冒泡事件
+
+**一个元素绑定了一个捕获事件，绑定了一个冒泡事件，执行几次？ 顺序？**
+
+```html
+<div id="one">
+  one
+  <div id="two">
+    two
+    <div id="three">
+      three
+      <div id="four">
+        four
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+```javascript
+document.getElementById('one').addEventListener('click', function() {
+  console.log('one')
+}, true)
+document.getElementById('two').addEventListener('click', function() {
+  console.log('two 冒泡')
+}, false)
+document.getElementById('two').addEventListener('click', function() {
+  console.log('two 捕获')
+}, true)
+
+document.getElementById('three').addEventListener('click', function() {
+  console.log('three')
+}, true)
+document.getElementById('four').addEventListener('click', function() {
+  console.log('four')
+}, true)
+```
+
+two 元素即绑定了冒泡 也绑定了捕获。
+
+* 标准事件流
+
+如果是目标发生了事件：则目标元素先绑定了什么就先执行什么，其他元素是先捕获后冒泡
+
+如果不是目标事件发生了事件：则先执行捕获或执行冒泡
+
+例如：点击two： 输出：one , two 冒泡, two 捕获
+
+例如：点击four： 输出：one，two 捕获， three， four， two 冒泡
+
+* IE：后绑定的会覆盖钱绑定的事件
+
+[事件流的例子](https://codepen.io/shuliqi/pen/ZEbKjLm?editors=1010) 
+
+**IE与DOM事件的区别**
+
+* 事件流不一样：
+
+  DOM: 捕获事件（true）， 目标事件， 冒泡事件（false）
+
+  IE: 冒泡事件
+
+* 监听函数的参数不一致
+
+  DOM: addEventListener(type, fn, false/true)
+
+  IE: attachevent(type, fn)
+
+  type 表示事件类型， fn 表示事件触发的函数
+
+* this取值也不一致
+
+  DOM: 严格模式下（undefined）， 非严格模式（当前调用的对象）
+
+  IE: window
+
+* 取消冒泡不一致
+
+  DOM: e.stopPropagatioon()
+
+  IE: window.event.canceBubble = true
+
+* 取消默认行为
+
+  DOM: e.preventDefualt ()
+
+  IE: window.event.returnValue  = false
+
+* 获取事件源不一致
+
+  DOM: e.target
+
+  IE: window.event.srcElement
+
+
+
+#### 普通事件和事件绑定有什么区别？
+
+普通事件：只支持单一事件， 后面绑定的事件会覆盖当前的事件。
+
+事件绑定 ：支持绑定多个事件，不会被覆盖， 绑定几个就会有多少个？
+
+
+
+#### mouseover 和 mouseenter的区别
+
+**mouseover:** 鼠标移入某个元素或者某个元素的子元素都会触发，有冒泡的过程， 对应的取消事件是mouseout
+
+**mouseenter :**鼠标移除本身元素触发， 不存在冒泡过程， 对应的取消事件是mouseleave
+
+ 
+
+#### 事件委托（事件代理）
+
+原理：利用冒泡原理，把事件加到父级上面， 让父级来执行
+
+好处：提高性能， 新增加的元素也会有该事件
+
+```html
+<ul id="ul">
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+</ul>
+```
+
+```javascript
+document.getElementById('ul').addEventListener('click', function(e) {
+  const event = e || window.evebt;
+  const target = event.target || event.srcElemnt;
+  console.log(target.nodeName)
+  if (target.nodeName === 'LI') {
+    target.style.color = 'red';
+  }
+}, false)
+```
+
+#### 事件代理在捕获阶段的实际应用
+
+可以在父元素层面阻止事件向子元素传播，也可代替子元素执行某些操作。
 

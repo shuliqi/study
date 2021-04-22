@@ -8,9 +8,9 @@
 
 
 
-标准盒子模型： content就是content，不包含padding 和border： width = content.width
+标准盒子模型：width就是content，不包含padding 和border： width = content.width
 
-IE盒子模型： content 包含了 pading 和 border：width = content.width+ + padding + border；
+IE盒子模型： width包含了content ， pading 和 border：width = content.width+ + padding + border；
 
 box-sizing: content-box(加上padding和border，content不会减少)，border-box（加上border + padding， 内容是减少的）
 
@@ -18,47 +18,181 @@ box-sizing: content-box(加上padding和border，content不会减少)，border-b
 
 ### 2.css3的新属性
 
-* word-wrap: 文字换行---->break-word， normal（浏览器默认处理）
+#### 选择器:
 
-* text-overflow：clip(修剪)，ellipsis(超出省略)
+**伪类选择器**
 
-* text-decoration：
+1. first-child: 父元素的第一个子元素
 
-  * underline(文本下定义一条线)
-  * overline(文本上定义一条线)
-  * line-through(穿过文本的一条线)
-  * blink(定义闪烁的文本
+   ```css
+    .parent :first-child {
+         color:  red;
+     }
+   ```
 
-* text-shadow(h-shadow, v-shadow, blur, color)
+2. last-child：父元素的最后一个子元素
 
-  * h-shadow： 水平阴影的位置
-  * v-shadow:    垂直阴影的位置
-  * blur: 模糊的距离
-  * color: 阴影的颜色
+3. nth-child(n)： 父元素的第n个子元素
+
+   ```css
+     .parent :nth-child(2) {
+         color:  red;
+     }
+   ```
+
+4. nth-last-child(n): 父元素倒数的第n个元素
+
+   ```css
+   .parent :nth-last-child(2) {
+       color:  red;
+   }
+   ```
+
+   
+
+**属性选择器**：选取标签带有某些属性的选择器(^开始位置，$ 结束位置, *任意位置)
+
+   ```html
+   
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <title></title>
+       <meta charset="UTF-8">
+       <style>
+           /* 选取具有class开头是shu的元素 */
+           .parent span[class^="shu"] {
+               color: red;
+           }
+           /* 选取具有class结尾是Shu的元素 */
+            .parent span[class$="Shu"] {
+               color: yellow;
+           }
+           /* 选取具有class任意位置是shu的元素 */
+           .parent span[class*="Shu"] {
+               color: #970;
+           }
+           /* 选取具有type位置是text的input元素 */
+          .parent input[type*="text"] {
+               color: #970;
+           }
+       </style>
+   <div 
+   <div class="parent">
+       <span class="shuliqi1">1</span>
+       <span class="shuliqi2">2</span>
+       <span class="shuliqi3">3</span>
+       <span class="indexShu">4</span>
+       <span class="indexShu">5</span>
+       <span class="indexShuhah">6</span>
+       <span class="indexShuhah">7</span>
+       <input type="text"/>
+   </div>
+   <body>
+   </body>
+   </html>
+   ```
+
+**伪元素选择器**---> 伪元素不是页面真正的元素，是css的展示样式
+
+* first-letter：文本的第一个单词或者字
+* first-line：文本的第一行
+* selection：选中的文本
+* before：在元素的开始位置创建一个元素， 该元素为行内元素，必须结合content 使用
+* after：在元素的结束位置创建一个元素， 该元素为行内元素，必须结合content 使用
+
+```html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <style>
+        .parent {
+            width: 100px;
+        }
+        /* 文本的第一个字 */
+        .parent::first-letter{
+            color: red;
+        }
+        /* 文本的第一行文字 */
+        .parent::first-line{
+            color:yellow;
+        }
+        /* 选中的文字的颜色 */
+        .parent::selection{
+            color:#085;
+        }
+        .parent::before {
+            content: "开始";
+        }
+        .parent::after {
+            content: "结束";
+        }
+    </style>
+<div 
+<div class="parent">
+   你好呀阿里卡时间段奥斯卡好大就爱上大德哈卡建设大街黄寺大街等哈哈吉收到货噶几是
+</div>
+<body>
+</body>
+</html>
+```
+
+
+
+#### 文字效果：
+
+* **word-wrap**: 文字换行---->break-word， normal（浏览器默认处理）
+
+  white-space，**控制空白字符的显示**，同时还能控制是否自动换行。它有五个值：`normal | nowrap | pre | pre-wrap | pre-line`
+
+  word-break，**控制单词如何被拆分换行**。它有三个值：`normal | break-all | keep-all`
+
+  word-wrap（overflow-wrap）**控制长度超过一行的单词是否被拆分换行**，是`word-break`的补充，它有两个值：`normal | break-word`
+
+  [彻底搞懂word-break、word-wrap、white-space](https://juejin.cn/post/6844903667863126030)
+
+  超出省略一般这么写:
 
   ```css
-  text-shadow: 5px 5px 5px #FF0000;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   ```
 
-* gradient 渐变效果
+* **text-overflow**：clip(修剪)，ellipsis(超出省略)
 
-  * liner-gradient: 上下左右渐变
+* **text-decoration**：
 
-    ```
-    background-image: linear-gradient(direction, color-stop1, color-stop2, ...);
-    background-image: linear-gradient(#e66465, #9198e5);
-    ```
+  * underline(文本下定义一条线)
 
-  * radial-gradient： 径向渐变
+  * overline(文本上定义一条线)
 
-    ````
-    background-image: radial-gradient(shape size at position, start-color, ..., last-color);
-    background-image: radial-gradient(red, yellow, green);
-    ````
+  * line-through(穿过文本的一条线)
 
-  
+  * blink(定义闪烁的文本
 
-* transition：过度效果
+
+* **text-shadow**（h-shadow, v-shadow, blur, color）
+
+    * h-shadow： 水平阴影的位置
+
+    * v-shadow:    垂直阴影的位置
+
+    * blur: 模糊的距离
+
+    * color: 阴影的颜色
+
+      ```css
+        /* 水平阴影的位置，垂直阴影的位置，模糊的距离，阴影的颜色 */
+        text-shadow: 10px 10px 5px red;
+      ```
+
+#### 动画
+
+* **transition**：过度效果(从一个样式变为另外一个样式添加效果)
 
   ```
   transition: property duration timing-function delay;
@@ -80,30 +214,50 @@ box-sizing: content-box(加上padding和border，content不会减少)，border-b
   
   ```
 
-* transform 2d 或者3d 变换
+* **transform** 2d 或者3d 变换
 
   translate --> 平面
 
   rotate(32deg) ---> 旋转
 
-  scal() ---> 缩放
+  scale() ---> 缩放
 
   skew----> 翻转
 
-* animation(动画函数，动画时间，动画曲线，动画次数，是否反方向)
+  ```css
+  /* 平面位移 */
+  transform: translate(100px, 100px);
+  
+  /* 旋转20度 */
+  transform: rotate(20deg);
+  
+  /* 沿着x轴翻转30度，y轴翻转20度 */
+  transform: skew(30deg, 20deg);
+  
+  /* 沿着x轴翻转30度，y轴翻转20度 */
+  transform: scale(2)
+  ```
+
+  
+
+* **animation**(动画函数，动画时间，动画曲线，动画次数(n)，是否反方向(alternate))
 
   * 动画曲线：linear（匀速）， ease（低速开始，然后加快，然后放慢结束），ease-in（低速开始），ease-out低速结束）， ease-in-out(低速开始和结束)
   * 是否反方向： alternate 反方向 normal(默认值)
 
   ```
-  .box {
-     animation:mymove 5s infinite;
-  }
-  @keyframes mymove {
-  	0% {width: 100px;}
-  	10% {width: 200px;}
-  	100% {width: 500px;}
-  }
+    @keyframes move {
+        0% { width: 100px }
+        50% { width: 300px }
+        100% { width: 500px }
+    }
+    .parent {
+        height: 10px;
+        width: 10px;
+        background: red;
+        /* 执行的动画函数名字 执行的时间 执行的曲线 延迟的时间 执行的次数(infinite无限)， 是否反方向（alernate反防线） */
+        animation: move 5s linear 2s infinite alternate;
+    }
   ```
 
 Animation和transition大部分属性是相同的，他们都是随时间改变元素的属性值，他们的主要区别是transition需要触发一个事件才能改变属性，而animation不需要触发任何事件的情况下才会随时间改变属性值，并且transition为2帧，从from .... to，而animation可以一帧一帧的。
@@ -131,7 +285,7 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 * 跟元素（html）
 * float 不为 none
 * position 为 fixed 或者 absolute
-* Overflow 不为visible
+* Overflow 不为visible（（超出的不会修剪））
 * Display 为 inline-block，flex, table-ceil等
 
 ##### BFC的规则
@@ -142,7 +296,8 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 * BFC区域的元素不会与浮动的元素重叠在一起
 * b f c 计算高度的时候， 浮动元素的高度也需要计算进去
 * Bfs 是一个独立的渲染空间，不会影响到外部
-* ‘
+
+  
 
 ##### BFC的应用
 
@@ -462,10 +617,100 @@ span  img， a, br, input, select等
 
 ### 7. position的值
 
-* absolute ： 生成绝对定位，相对于static以为的第一个元素进行定位的， 元素的定位通过top，left，buttom， right 来定位的
-* fixed: 生成绝对定位， 相对于浏览器来定位的。通过top，button，left，right 来定位的。
-* rrelective: 生成相对定位的， 就是相对于它自己正常的定位来定位的，假如：left： 20， 那么这元素的左边会多处20px
-* static： 没有定位， 就就出现在正常的流里面， 设置to， left，right 是没有用的。 
+* ## 一、position 属性的作用
+
+  `position`属性用来指定一个元素在网页上的位置，一共有5种定位方式，即`position`属性主要有五个值。
+
+  > - `static`
+  > - `relative`
+  > - `fixed`
+  > - `absolute`
+  > - `sticky`
+
+  下面就依次介绍这五个值。最后一个`sticky`是2017年浏览器才支持的，本文将重点介绍。
+
+  ## 二、static 属性值
+
+  `static`是`position`属性的默认值。如果省略`position`属性，浏览器就认为该元素是`static`定位。
+
+  这时，浏览器会按照源码的顺序，决定每个元素的位置，这称为"正常的页面流"（normal flow）。每个块级元素占据自己的区块（block），元素与元素之间不产生重叠，这个位置就是元素的默认位置。
+
+  ![img](https://www.wangbase.com/blogimg/asset/201911/bg2019111720.jpg)
+
+  注意，`static`定位所导致的元素位置，是浏览器自主决定的，所以这时`top`、`bottom`、`left`、`right`这四个属性无效。
+
+  ## 三、relative，absolute，fixed
+
+  `relative`、`absolute`、`fixed`这三个属性值有一个共同点，都是相对于某个基点的定位，不同之处仅仅在于基点不同。所以，只要理解了它们的基点是什么，就很容易掌握这三个属性值。
+
+  这三种定位都不会对其他元素的位置产生影响，因此元素之间可能产生重叠。
+
+  ### 3.1 relative 属性值
+
+  `relative`表示，相对于默认位置（即`static`时的位置）进行偏移，即定位基点是元素的默认位置。
+
+  ![img](https://www.wangbase.com/blogimg/asset/201911/bg2019111721.jpg)
+
+  ![img](https://www.wangbase.com/blogimg/asset/201911/bg2019111722.jpg)
+
+  它必须搭配`top`、`bottom`、`left`、`right`这四个属性一起使用，用来指定偏移的方向和距离。
+
+  ![img](https://www.wangbase.com/blogimg/asset/201911/bg2019111723.jpg)
+
+  > ```css
+  > div {
+  >   position: relative;
+  >   top: 20px;
+  > }
+  > ```
+
+  上面代码中，`div`元素从默认位置向下偏移`20px`（即距离顶部`20px`）。
+
+  ### 3.2 absolute 属性值
+
+  `absolute`表示，相对于上级元素（一般是父元素）进行偏移，即定位基点是父元素。
+
+  它有一个重要的限制条件：定位基点（一般是父元素）不能是`static`定位，否则定位基点就会变成整个网页的根元素`html`。另外，`absolute`定位也必须搭配`top`、`bottom`、`left`、`right`这四个属性一起使用。
+
+  ![img](https://www.wangbase.com/blogimg/asset/201911/bg2019111801.jpg)
+
+  > ```css
+  > /*
+  >   HTML 代码如下
+  >   <div id="father">
+  >     <div id="son"></div>
+  >   </div>
+  > */
+  > 
+  > #father {
+  >   positon: relative;
+  > }
+  > #son {
+  >   position: absolute;
+  >   top: 20px;
+  > }
+  > ```
+
+  上面代码中，父元素是`relative`定位，子元素是`absolute`定位，所以子元素的定位基点是父元素，相对于父元素的顶部向下偏移`20px`。如果父元素是`static`定位，上例的子元素就是距离网页的顶部向下偏移`20px`。
+
+  注意，`absolute`定位的元素会被"正常页面流"忽略，即在"正常页面流"中，该元素所占空间为零，周边元素不受影响。
+
+  ### 3.3 fixed 属性值
+
+  `fixed`表示，相对于视口（viewport，浏览器窗口）进行偏移，即定位基点是浏览器窗口。这会导致元素的位置不随页面滚动而变化，好像固定在网页上一样。
+
+  ![img](https://www.wangbase.com/blogimg/asset/201911/bg2019111802.jpg)
+
+  它如果搭配`top`、`bottom`、`left`、`right`这四个属性一起使用，表示元素的初始位置是基于视口计算的，否则初始位置就是元素的默认位置。
+
+  > ```css
+  > div {
+  >   position: fixed;
+  >   top: 0;
+  > }
+  > ```
+
+  上面代码中，`div`元素始终在视口顶部，不随网页滚动而变化。
 
 
 

@@ -1,5 +1,3 @@
-import { left } from "inquirer/lib/utils/readline";
-import { func } from "assert-plus";
 
 // 冒泡排序
 function bubbleSort(arr) {
