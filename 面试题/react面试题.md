@@ -6,7 +6,7 @@
 
 - Class 关键字组件
 
-  class 关键字和 e s6 的的书写方式非常相同，可以通过 React.Component 进行创建，与构造函数不同的是： 该组件可以进行复杂逻辑的处理，不仅可以接受参数 props， 还可以有自己的 state，用于内部的通信
+  class 关键字和 es6 的的书写方式非常相同，可以通过 React.Component 进行创建，与构造函数不同的是： 该组件可以进行复杂逻辑的处理，不仅可以接受参数 props， 还可以有自己的 state，用于内部的通信
 
   ```html
   <!DOCTYPE html>
@@ -18,7 +18,7 @@
       <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
       <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
     </head>
-
+  
     <body>
       <div id="example"></div>
       <script type="text/babel">

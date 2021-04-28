@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 选取颜色的 -->
+  <input type='color' value="#ff0878" id="color">
+
+  <!-- 选取日期 -->
+  <input type='date' id='date'>
+</body>
+<script type="text/javascript">
+  document.getElementById("date").onchange = function(e) {
+    console.log("date", e.target.value)
+  }
+  document.getElementById("color").onchange = function(e) {
+    console.log("color", e.target.value)
+  }
+</script>
+</html>

@@ -48,12 +48,10 @@ box-sizing: content-box(加上padding和border，content不会减少)，border-b
    }
    ```
 
-   
 
 **属性选择器**：选取标签带有某些属性的选择器(^开始位置，$ 结束位置, *任意位置)
 
    ```html
-   
    <!DOCTYPE html>
    <html lang="en">
    <head>
@@ -970,28 +968,6 @@ display: inline-block;
 
   
 
-### 12 个浏览器的内核
-
-* IE:trident
-* 谷歌： 以前是webkit， 现在是Blink
-* 火狐： gecko
-* 欧朋： 开始是自己的presto， 后改称webkit, 现在是Blink
-* 360: IE—chrome 双内核
-
-### 13. 怪异模式和标准模式
-
-* 怪异模式： 就是使用浏览器自己的解析方式去解析。
-* 标准模式： 就是html css 的标准去解析。
-
-因为在没有出现html css  标准时， 是各个各个浏览器各自实现的。
-
-其中最大的不同就是：就是盒子模型的不同。
-
- ##### 如何触发怪异模型：不写doctype
-
-### 14. DOCTYPE 是什么
-
-<!docTYPE> 在html 标签的前面。用来表明web浏览器该使用哪个版本的html来编写指令，然后浏览器才知道用哪个规范来解析。
 
 
 ### 15 em, rem, px

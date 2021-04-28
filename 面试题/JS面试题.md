@@ -151,6 +151,10 @@ const a = [1, 2];
 console.log(myInstanceof(a, Array ));  // true
 ```
 
+
+
+
+
 ### 7. for of , for in 和 forEach,map 的区别。
 
 * **for ... of**: 只要具有interator接口， 就可以使用for...of 遍历他的属性值。
@@ -1658,7 +1662,7 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   https://www.jianshu.com/p/af945ea77b44
 
   ```javascript
-// 实现的原理
+  // 实现的原理
   const obj = {
     name: 'shuliqi',
     getName: function() {
@@ -1684,11 +1688,10 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   ```
   
   
-  
 ##### apply的实现
-  
+
 和call 实现的差不多， 只是传入的参数不同而已
-  
+
   ```javascript
   
     Function.prototype.myCall = function (thisObj, args) {
@@ -1715,11 +1718,11 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   }
   
   ```
-  
+
   https://www.jianshu.com/p/af945ea77b44
+
   
-  
-  
+
   ```javascript
   
   
@@ -1738,19 +1741,19 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   }
   getName.MyApply(obj, [18])
   ```
+
   
+
   
+
   
+
   
+
   
-  
-  
-  
-  
-  
-  
+
   ##### bind 的实现
-  
+
   ```javascript
     Function.prototype.myBind = function (thisObj, ...args1) {
       if (typeof this !== "function") {
@@ -1780,7 +1783,7 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
     const myNewTest = new newTest();
     myNewTest.getPerson(); // shuliqi 12
   ```
-  
+
   
 
 https://blog.csdn.net/tangzhl/article/details/79669461
@@ -3759,4 +3762,329 @@ document.getElementById('ul').addEventListener('click', function(e) {
 #### 事件代理在捕获阶段的实际应用
 
 可以在父元素层面阻止事件向子元素传播，也可代替子元素执行某些操作。
+
+
+
+
+
+
+
+
+
+ # 校招面试
+
+####  1. JavaScript 中 `undefined` 和 `not defined` 的区别
+
+JavaScript 未声明变量直接使用会抛出异常：`var name is not defined`，如果没有处理异常，代码就停止运行了。
+但是，使用`typeof undeclared_variable`并不会产生异常，会直接返回 `undefined`。
+
+```javascript
+var x; // 声明 x
+console.log(x); //output: undefined 
+
+
+console.log(typeof y); //output: undefined
+
+console.log(z); // 抛出异常: ReferenceError: z is not defined
+```
+
+#### 2. 下面的代码输出什么？
+
+```javascript
+var y = 1;
+if (function f(){}) {
+    y += typeof f;
+}
+console.log(y);
+```
+
+正确的答案应该是 `1undefined`。
+
+JavaScript中if语句求值其实使用`eval`函数，`eval(function f(){})` 返回 `function f(){}` 也就是 `true`。
+
+下面我们可以把代码改造下，变成其等效代码。
+
+```javascript
+var k = 1;
+if (1) {
+    eval(function foo(){});
+    k += typeof foo;
+}
+console.log(k); 
+```
+
+上面的代码输出其实就是 `1undefined`。为什么那？我们查看下 `eval()` 说明文档即可获得答案
+
+> 该方法只接受原始字符串作为参数，如果 string 参数不是原始字符串，那么该方法将不作任何改变地返回。
+
+恰恰 `function f(){}` 语句的返回值是 `undefined`，所以一切都说通了。
+
+注意上面代码和以下代码不同。
+
+```javascript
+var k = 1;
+if (1) {
+    function foo(){};
+    k += typeof foo;
+}
+console.log(k); // output 1function
+```
+
+#### 3.JavaScript中什么是闭包？写出一个例子
+
+闭包是在一个函数里声明了另外一个函数，并且这个函数访问了父函数作用域里的变量。
+
+下面给出一个闭包例子，它访问了三个域的变量
+
+- 它自己作用域的变量
+- 父函数作用域的变量
+- 全局作用域的变量
+
+#### 4.写一个函数，使用方法如下。
+
+```javascript
+console.log(mul(2)(3)(4)); // output : 24 
+console.log(mul(4)(3)(4)); // output : 48
+```
+
+```javascript
+function mul (x) {
+    return function (y) { // anonymous function 
+        return function (z) { // anonymous function 
+            return x * y * z; 
+        };
+    };
+}
+```
+
+函数柯里化：
+
+#### 5. JavaScript怎么清空数组？
+
+```
+var arrayList = ['a','b','c','d','e','f'];
+```
+
+- 直接改变arrayList所指向的对象，原对象并不改变
+
+  ```
+  arrayList = [];
+  arrayList.splice(0, arrayList.length);
+  ```
+
+- 这种方法通过设置length=0 使原数组清除元素。
+
+  ```
+  arrayList.length = 0;
+  ```
+
+#### 6. 下面代码输出什么？
+
+```javascript
+var output = (function(x){
+    delete x;
+    return x;
+})(0);
+  
+console.log(output);
+// 0
+```
+
+ `delete` 操作符是将object的属性删去的操作。但是这里的 `x` 是并不是对象的属性， `delete` 操作符并不能作用。
+
+```javascript
+var x = 1;
+var output = (function(){
+    delete x;
+    return x;
+})();
+
+console.log(output
+```
+
+输出是 `1`。`delete` 操作符是将object的属性删去的操作。但是这里的 `x` 是并不是对象的属性， `delete` 操作符并不能作用。
+
+```javascript
+var x = { foo : 1};
+var output = (function(){
+    delete x.foo;
+    return x.foo;
+})();
+
+console.log(output);
+```
+
+输出是 `undefined`。x虽然是全局变量，但是它是一个object。`delete`作用在`x.foo`上，成功的将`x.foo`删去。所以返回`undefined`
+
+```javascript
+var Employee = {
+    company: 'xyz'
+}
+var emp1 = Object.create(Employee);
+delete emp1.company
+console.log(emp1.company);
+```
+
+输出是 `xyz`，这里的 emp1 通过 prototype 继承了 Employee的 company。emp1自己并没有company属性。所以delete操作符的作用是无效的。
+
+
+
+
+
+```javascript
+var bar = true;
+console.log(bar + 0);   
+console.log(bar + "xyz");  
+console.log(bar + true);  
+console.log(bar + false);
+```
+
+```
+1
+truexyz
+2
+1
+```
+
+- Number + Number -> 加法
+- Boolean + Number -> 加法
+- Boolean + Boolean -> 加法
+- Number + String -> 连接
+- String + Boolean -> 连接
+- String + String -> 连接
+
+
+
+
+
+
+
+
+
+```javascript
+var z = 1, y = z = typeof y;
+console.log(y);  
+```
+
+输出是 `undefined`。js中赋值操作结合律是右至左的 ，即从最右边开始计算值赋值给左边的变量。
+
+```javascript
+var z = 1
+z = typeof y;
+var y = z;
+console.log(y);  
+```
+
+
+
+
+
+#### 7.函数声明的方式
+
+函数声明法
+
+```javascript
+function sum (num1 ,num2){   
+      return num1+num2  
+} 
+```
+
+表达式声明
+
+```javascript
+  var sum = function(num1,num2){   
+      return num1+num2  
+  };
+```
+
+
+
+
+
+```javascript
+console.log(foo)
+console.log(bar)
+
+var foo = function(){ 
+    // Some code
+}; 
+function bar(){ 
+    // Some code
+}; 
+```
+
+输出：
+
+```javascript
+undefined
+function bar(){ 
+    // Some code
+}; 
+```
+
+将函数声明提升到代码树顶部）；至于函数表达式声明，则必须等到解析器执行到它所在的代码行，才会执行，无法自动提升。
+
+
+
+#### 8. 变量提升
+
+```javascript
+var salary = "1000$";
+
+(function () {
+    console.log("Original salary was " + salary);
+
+    var salary = "5000$";
+
+    console.log("My New Salary " + salary);
+})();
+```
+
+````javascript
+Original salary was undefined
+My New Salary 5000$
+````
+
+等价于：
+
+```javascript
+var salary = "1000$";
+
+ (function () {
+     var salary ;
+     console.log("Original salary was " + salary);
+
+     salary = "5000$";
+
+     console.log("My New Salary " + salary);
+ })();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
