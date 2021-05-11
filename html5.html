@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  #canvas {
+    border: 1px solid #ccc;
+  }
+</style>
+<body>
+  <!-- <data value="1111">产品1</data>
+  <data value="2222">产品1</data>
+  <time datetime="2001-05-15 19:00">表示日期和时间，datetime来指定时间</time>
+  <mark>高亮文本</mark>
+
+
+  <video  src="https://www.w3school.com.cn/i/movie.ogg"
+          controls="controls" 
+          autoplay="autoplay"
+          loop="loop"
+          preload="preload"
+          muted="muted"
+          poster="http://p6.qhimg.com/t01f5a5270b7946b505.jpg"
+          height="100px"
+          width="200px">
+  </video> -->
+<!-- 
+  <audio  src="https://www.w3school.com.cn/i/movie.ogg"
+          loop="loop"
+          controls="controls"
+          preload="preload"
+          autoplay="autoplay"></audio> -->
+  <canvas  id="canvas">
+    <P>你的浏览器不支持canvas标签</P>
+  </canvas>
+</body>
+<script>
+  const canvas = document.getElementById("canvas");
+  const cxt = canvas.getContext("2d");
+  cxt.beginPath();
+  cxt.moveTo(10, 10);
+  cxt.lineWidth = 20;
+  // 末端以圆形结束
+  cxt.lineCap = "round";
+  cxt.lineTo(50, 50);
+  cxt.stroke();
+  cxt.closePath();
+
+  cxt.beginPath();
+  cxt.moveTo(80, 50);
+  cxt.lineTo(100, 100);
+  cxt.lineWidth = "20";
+  cxt.lineCap = "butt";
+  cxt.stroke();
+
+  cxt.beginPath();
+  cxt.moveTo(150, 20);
+  cxt.lineTo(130, 130);
+  cxt.lineWidth = "20";
+  cxt.lineCap = "square";
+  cxt.stroke();
+
+</script>
+</html>

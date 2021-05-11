@@ -407,3 +407,297 @@ function instanceOf(A, B) {
 }
 
 }
+
+
+
+const obj = {
+  name: "11111",
+}
+const myObj = obj;
+myObj.name = "22222";
+console.log(obj.name)
+
+
+const name = Symbol();
+console.log(typeof name)
+
+
+console.log(typeof "111"); 
+console.log(typeof null);
+console.log(typeof undefined); 
+console.log(typeof false);  
+console.log(typeof 12312); 
+console.log(typeof Symbol("2222")); 
+console.log(typeof function(){});  
+console.log(typeof new Date());
+console.log(typeof [1,2,3]);  
+console.log(typeof new Object());
+
+
+function myInstanceof(A, B) {
+  const O = B.prototype; // 构造函数B的prototype属性
+  A = A.__proto__;       // 取 A 的隐形原型
+  while(true) {
+    if (A === 'null' ) {  //已经找到顶层
+      return false;
+    }
+    if ( A === O) {  //当 O 严格等于 L 时，返回 true
+      return true;
+    }
+    A = A.__proto__;
+  }
+}
+
+console.log(myInstanceof('111', Object))
+
+if(undefined) {
+  console.log("1231")
+}
+
+
+var salary = "1111";
+(function () {
+    console.log(salary);
+    salary = "222222";
+    console.log(salary);
+})();
+
+console.log(foo)
+console.log(bar)
+var foo = function(){ 
+    // Some code
+}; 
+function bar(){ 
+    // Some code
+};
+
+const obj = {
+  name: "shuliqi",
+  age: 12
+};
+function get(sex, size) {
+  console.log(this.name, this.age, sex, size);
+}
+get.call(obj, "女", "成年");
+
+
+
+
+const obj = {
+  name: "shuliqi",
+  age: 12
+};
+function get(sex, big) {
+  console.log(this.name, this.age, sex, big);
+}
+get.apply(obj, ["女", "成年"]);
+
+
+
+const obj = {
+  name: "shuliqi",
+  age: 12
+};
+function get(sex, big) {
+  console.log(this.name, this.age, sex, big);
+}
+const test = get.bind(obj, "女", "成年");
+test()
+
+// call 的一个实现方式
+Function.prototype.myCall = function( thisObj, ...arg) {
+  if (typeof this !== 'function') return false;
+  const fn = Symbol();
+  thisObj[fn] = this;
+  thisObj[fn](...arg);
+  delete thisObj[fn];
+}
+const obj = {
+  name: "shuliqi",
+  age: 12
+};
+function get(sex, big) {
+  console.log(this.name, this.age, sex, big);
+}
+get.call(obj, "女", "成年");
+
+
+
+// apply
+
+
+
+Function.prototype.myApply = function(thisObj, arg) {
+  if (typeof this !== "function") return false;
+  const fn = Symbol();
+  thisObj[fn] = this;
+  thisObj[fn](...arg);
+  delete thisObj[fn];
+}
+
+const obj = {
+  name: "shuliqi",
+  age: 12
+};
+function get(sex, big) {
+  console.log(this.name, this.age, sex, big);
+}
+get.myApply(obj,[ "女", "成年"]);
+
+// sum(1)(2)(3)  相加
+
+function curry(fn, args = []) {
+  return function() {
+      const rest = [...args, ...arguments];
+      if (rest.length < fn.length) {
+          // 如果传入的参数的个数没有等于 fn 函数的参数的个数，则递归返回
+          return curry.call(this, fn,  rest);
+      }
+      else {
+          // 执行fn
+          return fn.apply(fn, rest);
+      }
+  }
+}
+function add(x, y, z) {
+  return x + y + z
+} 
+var curryAdd = curry(add);
+console.log(curryAdd(1)(1)(1)); // 3
+
+
+const add  = function(x, y ,z) {
+  return x + y + z;
+}
+const  curry = function(fn, arg = []) {
+  return function() {
+    const rest = [...arguments, ...arg]
+    if ( rest.length < fn.length ) {
+      return curry.call(this, fn, rest);
+    } else {
+      return fn.apply(null, rest);
+    }
+  }
+}
+
+const curryAdd = curry(add);
+console.log(curryAdd(1)(2)(3));
+
+
+const debounce = function(fn, wait, immediate = true) {
+  let timer, context, args;
+  const later = ()=> setTimeout(() => {
+    timer = null;
+    if (!immediate) {
+      fn.apply(context, fn, args);
+      context = args = null;
+    }
+  }, wait)
+  return function() {
+    if (!timer) {
+      timer = later();
+      if (immediate) {
+        timer.apply(this, arguments);
+      } else {
+        context = this;
+        args = arguments;
+      }
+    } else {
+      clearTimeout(timer);
+      timer = later();
+    }
+  }
+};
+const  handle = function() {
+  console.log("111");
+}
+window.addEventListener('resize', debounce(handle, 1000, false))
+
+
+
+setTimeout(function(){
+  console.log("a");
+},0)
+new Promise(function(resolve){
+  console.log("b");
+  resolve()
+}).then(function(){
+  console.log("c");
+})
+console.log("d");
+
+dbca
+
+
+
+const p1 = new Promise((resolve, reject) => {
+  console.log("1")
+  resolve("2");
+  console.log("3");
+});
+p1.then((value) => {
+  console.log(value)
+})
+function sleep(time) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, time);
+  });
+}
+
+sleep(1000)
+
+{
+  function f() {
+    setTimeout(() => {
+      console.log(5);
+      Promise.resolve().then(() => {
+        console.log(6);
+      });
+    });
+
+    new Promise((resolve, reject) => {
+      console.log(1);
+      resolve(1);
+    }).then(() => {
+      console.log(2);
+      Promise.resolve().then(() => {
+        console.log(3);
+      });
+      setTimeout(() => {
+        console.log(4);
+      });
+      Promise.resolve().then(() => {
+        console.log(7);
+      });
+    });
+  }
+  f();
+  
+}
+
+
+function f() {
+  setTimeout(() => {
+    console.log(5);
+    Promise.resolve().then(() => {
+      console.log(6);
+    });
+  });
+
+  new Promise((resolve, reject) => {
+    console.log(1);
+    resolve(1);
+  }).then(() => {
+    console.log(2);
+    Promise.resolve().then(() => {
+      console.log(3);
+    });
+    setTimeout(() => {
+      console.log(4);
+    });
+    Promise.resolve().then(() => {
+      console.log(7);
+    });
+  });
+}
+f();

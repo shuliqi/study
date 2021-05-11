@@ -8,7 +8,7 @@ symbol 是ES6 新加的一种新的基本数据类型。 表示独一无二的�
 
 * 作为属性名：
 
-  ```
+  ```javascript
   const mySymbol = symbol();
   const obj = {
   	[mySymbol]: "hahah"
@@ -1612,6 +1612,20 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
 
   立即调用
 
+  ```javascript
+  const obj = {
+    name: "shuliqi",
+    age: 12
+  };
+  function get(sex, size) {
+    console.log(this.name, this.age, sex, size);
+  }
+  get.call(obj, "女", "成年");
+  // shuliqi 12 女 成年
+  ```
+
+  
+
 - apply(对象, [1,2,3])
 
   第一个参数就是绑定的this值
@@ -1619,6 +1633,22 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   第二参数是一个数组 参数数组
 
   立即调用
+
+  ```javascript
+  
+  const obj = {
+    name: "shuliqi",
+    age: 12
+  };
+  function get(sex, big) {
+    console.log(this.name, this.age, sex, big);
+  }
+  get.apply(obj, ["女", "成年"]);
+  
+  // shuliqi 12 女 成年
+  ```
+
+  
 
 - bind(对象)
 
@@ -1628,15 +1658,28 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
 
   不会立即调用， 而是返回一个新的函数。供之后调用
 
+  ```javascript
+  const obj = {
+    name: "shuliqi",
+    age: 12
+  };
+  function get(sex, big) {
+    console.log(this.name, this.age, sex, big);
+  }
+  const test = get.bind(obj, "女", "成年");
+  test();
+  // shuliqi 12 女 成年
+  ```
   
-
+  
+  
   ##### call 的实现
-
+  
   * 新加一个函数， 让当前调用的函数的数的this指向增新的函数
   * 执行新函数
   * 删除新函数
   * 返回结果
-
+  
   ```javascript
   
     Function.prototype.myCall = function (thisObj, ...args) {
@@ -1658,9 +1701,9 @@ call 和 apply 的功能相同，区别在于传参的方式不一样:
   
   
   ```
-
+  
   https://www.jianshu.com/p/af945ea77b44
-
+  
   ```javascript
   // 实现的原理
   const obj = {
@@ -4048,15 +4091,11 @@ My New Salary 5000$
 等价于：
 
 ```javascript
-var salary = "1000$";
-
+var salary = "11111";
  (function () {
-     var salary ;
-     console.log("Original salary was " + salary);
-
-     salary = "5000$";
-
-     console.log("My New Salary " + salary);
+     console.log(salary);
+     var salary = "22222";
+     console.log(salary);
  })();
 ```
 

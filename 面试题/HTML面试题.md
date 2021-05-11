@@ -16,28 +16,144 @@ DOCTYPE是html5标准网页声明，且必须声明在HTML文档的第一行。�
 
   ##### 如何触发怪异模型：不写 DOCTYPE
 
-```
+```html
 // 告知文档使用 html5 标准来解析
-<!DOCTYPE html> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+</html>
 ```
 
-### 2. HTML语义化
+### 2. 你是怎么理解HTML语义化
 
-- 用正确的标签做正确的事情。
+#### Step 1：先举例说明
+
+语义化简单的说就使用正确的标签的标签做正确的事，比如标题可以使用h1~h6，导航使用nav, 块使用section等
+
+#### Step 2：说说为什么需要使用语义化标签
+
 - html语义化让页面的内容结构化，结构更清晰，便于对浏览器，搜索引擎解析；
 - 即使在没有样式CSS情况下也以一种文档格式显示，并且是容易阅读的；
 - 搜索引擎的爬虫也依赖于HTML标记确定上下文和各个关键字的权重，利于SEO;
-- 使阅读源代码的人对网站更容易将网站分块，便于阅读维护理解。
+- 是其他的开发者
 
 ### 3. HTML5有哪些新特性
 
+##### 表示结构的标签：
+
+```html
+<header> 		头部内容
+<nav>   	 	导航   
+<main>  		主要内容
+<article> 	独立的内容
+<section>  	某个块的内容
+<aside>  		表示与其余页面几乎没有关系---> 侧边栏等
+<footer>  	底部内容
+```
+
+##### 表示文字形式
+
+- <data>
+
+  ```html
+  <data value="1111">产品1</data>
+  <data value="2222">产品1</data>
+  ```
+
+- <time> 表示日期和时间值， 通过读取 datatime 属性来指定
+
+  ```html
+  <time datetime="2001-05-15 19:00">May 15</time>.
+  ```
+
+- <mark> 高亮文本
+
+  ```html
+  <mark>高亮文本</mark>
+  ```
+
+#####  嵌入内容
+
+- **video**  定义视频
+
+
+  ```html
+    <video  src="https://www.w3school.com.cn/i/movie.ogg"/  
+            controls="controls" 
+            autoplay="autoplay"
+            loop="loop"
+            preload="preload"
+            muted="muted"
+            poster="http://p6.qhimg.com/t01f5a5270b7946b505.jpg"
+            height="100px"
+            width="200px">
+    </video>
+  ```
+
+  src: 视频的地址
+
+  controls： 出现控制条（播放，静音等控制）
+
+  autoplay：自动播放
+
+  loop：循环播放
+
+  muted： 静音播放
+
+  poster: 视频下载时显示的图片
+
+  preload： 页面加载时加载视频
+
+  height: 视频的高
+
+  width：视频的宽 
+
+- **audio**  定义视频
+
+  ```html
+    <audio  src="https://www.w3school.com.cn/i/movie.ogg"
+            loop="loop"
+            controls="controls"
+            preload="preload"
+            autoplay="autoplay">
+    </audio>
+  ```
+
+  src: 音频的地址
+
+  controls： 出现控制条（播放，静音等控制）
+
+  autoplay：自动播放
+
+  loop：循环播放
+
+  muted： 静音播放
+
+  preload： 页面加载时加载视频
+
+- **canvas** 定义图形， 标只是图形容器，必须使用脚本来绘制图形
+
+  [canvas的学习及其使用](http://localhost:4000/2018/05/07/canvas%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E4%BD%BF%E7%94%A8/#%E7%BB%98%E5%88%B6%E7%9F%A9%E5%BD%A2)
+
 这篇文章写的很清楚：https://www.cnblogs.com/vicky1018/p/7705223.html
+
+
+
+
 
 ##### a. 用于绘画的canvas元素；
 
 ##### b. 用于媒介回放的video和audio元素；
 
-##### c. 对本地离线存储有更好的支持(**localStorage**, **sessionStorage**)
+##### c. 对本地离线存储有更好的支持√)
 
 - 共同点
 
