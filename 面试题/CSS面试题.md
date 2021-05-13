@@ -1,5 +1,11 @@
 ### 1.盒子模型
 
+![CSS box-model](https://www.runoob.com/images/box-model.gif)
+
+所有的html元素都可以看成是一个盒子模型， 一个盒子模型是由：content(内容)， padding（内边距），border（边框），margin（外边距）
+
+
+
 ![https://img4.mukewang.com/5b73f51e00015f7907740523.jpg](https://img4.mukewang.com/5b73f51e00015f7905000338.jpg)
 
 ![https://img1.mukewang.com/5b73f53f0001a7ec07610507.jpg](https://img.mukewang.com/5b73f53f0001a7ec05000334.jpg)
@@ -8,11 +14,17 @@
 
 
 
-标准盒子模型：width就是content，不包含padding 和border： width = content.width
+标准盒子模型：width就是content，不包含padding 和border： width = content.width。
 
 IE盒子模型： width包含了content ， pading 和 border：width = content.width+ + padding + border；
 
-box-sizing: content-box(加上padding和border，content不会减少)，border-box（加上border + padding， 内容是减少的）
+box-sizing: 
+
+- border-box： 设置的宽度是多少就是多少， 即使加上 pading 和 border 也是一样的（加上 border + padding， 内容是减少的）
+
+- content-box：(加上padding和border，content不会减少)，
+
+  
 
 [box-sizing的例子](https://codepen.io/shuliqi/pen/MWarpmQ)
 

@@ -45,6 +45,14 @@ DOCTYPE是html5标准网页声明，且必须声明在HTML文档的第一行。�
 - 搜索引擎的爬虫也依赖于HTML标记确定上下文和各个关键字的权重，利于SEO;
 - 是其他的开发者
 
+**出彩地回答** - **举例法/阐述法**
+
+我认为 html 语义化主要指的是我们应该使用合适的标签来划分网页内容的结构。html 的本质作用其实就是定义网页文档的结构。一个语义化的文档，能够使页面的结果更加清晰，易于理解。这样不仅有利于开发者的维护和理解，同时也能够使机器对文档内容进行正确的解读。
+
+比如我们常用的 b 标签和 strong 标签，它们在样式上都是文字的加粗，但是 strong 标签拥有强调的语义。对于一般显示来说，可能我们看上去没有差异，但是对于机器来说，就会有很大的不同。如果用户使用的是屏幕阅读器来访问网页的话，使用 strong 标签就会有明显的语调上的变化，而 b 标签则没有。
+
+如果是搜索引擎的爬虫对我们的网页进行分析的话，那么它会依赖于 html 标签来确定上下文和各个关键字的权重，一个语义化的文档对爬虫来说是友好的。是有利于爬虫对文档内容解读的，从而有利于我们网站的 SEO，从 html 5 我们可以看出，标准是倾向于以语义化的方式来构建网页的，比如新增了 header、footer、aside 这些语义化的标签，删除了 big、font 这些没有语义的标签。html 5 新增的内容远远不止于此。
+
 ### 3. HTML5有哪些新特性
 
 ##### 表示结构的标签：
@@ -145,15 +153,62 @@ DOCTYPE是html5标准网页声明，且必须声明在HTML文档的第一行。�
 
 这篇文章写的很清楚：https://www.cnblogs.com/vicky1018/p/7705223.html
 
+### 4. meta viewport 是做什么用的，怎么写
+
+#### Step 1：使用目的
+
+meta viewport 是为了让用户在移动端不让用户缩放页面
+
+#### Step 2：怎么写
+
+<meta name="viewport" content="width=device-width initial-scale=1 maximum-scale=1 minimum-scale=1">
+
+#### Step 3：解释每个单词的含义
+
+- width=device-width： 页面布局的宽度等于设备分辨率的宽度
+- initial-scale=1： 初始缩放比例为设备的分辨率的大小
+- maxmum-scale =1: 最大的缩放比例
+- minimum-scale =1:  最小的缩放比例
+
+### 5.H5 是什么？
+
+移动端页面（微信上的移动端页面）
+
+> 总之 跟 html5 是没什么关系的
+
+### 6.label 标签的作用
+
+label标签是用来定义表单控件之前的关联关系的。如果点击该标签，那么相关联的控件就会会哦的焦点。lable 有for属性，值是要关联的元素的id。
+
+如果lable 标签把控件包裹起来，那么就不需要for属性。点击label 标签就会自定获得焦点。
+
+### 7.行内元素有哪些？块级元素有哪些？ 空(void)元素有那些？
+
+html的元素都有默认的display值，默认值为block的是块级元素。默认值为inline的为行内元素。
+
+- 块级元素：独占一行，可以设置宽高，设置了宽高还是会占一行。
+
+  div， ul，lo, li , h1 ~ h6，table, section, main等
+
+- 行内标签：会与其他的行内标签并排在一行，不可以设置宽高。
+
+  span， a， img，input，i，b， strong等
+
+- 空元素：没有闭合标签的标签的标签。
+
+- img， input，br， meta
 
 
 
+### 8. a标签中 如何禁用href 跳转页面 或 定位链接
 
-##### a. 用于绘画的canvas元素；
+```js
+<a href="javascript:void(0)"></a>
+```
 
-##### b. 用于媒介回放的video和audio元素；
 
-##### c. 对本地离线存储有更好的支持√)
+
+### 9. html5新特性之：localStorage， sessionStorage
 
 - 共同点
 
@@ -210,93 +265,35 @@ DOCTYPE是html5标准网页声明，且必须声明在HTML文档的第一行。�
   key = sessionStorage.key(1); // 'name'
   ```
 
- ##### d. 语意化更好的内容元素
+| 特性         | cookie                                                       | localStorage             | sessionStorage                              |
+| ------------ | ------------------------------------------------------------ | ------------------------ | ------------------------------------------- |
+| 数据生命周期 | 一般由服务器生成，可以设置过期时间                           | 除非被清理，否则一直存在 | 仅在当前会话有效， 关闭页面或浏览器后被清除 |
+| 数据存储大小 | 4K                                                           | 5M                       | 5M                                          |
+| 与服务端通信 | 每次都会携带在同源 的http请求头中,如果使用cookie保存过多 数据会带来性能问题的 | 不参与                   | 不参与                                      |
+| 用途         | 服务端生成，用于表示用户身份                                 | 用于浏览器缓存数据       | 用于浏览器缓存数据                          |
 
-　语义化标签使得页面的内容结构化
 
-| 标签                  | 描述                             |
-| --------------------- | -------------------------------- |
-| <hrader></header>     | 定义了文档的头部区域             |
-| <footer></footer>     | 定义了文档的尾部区域             |
-| <nav></nav>           | 定义文档的导航                   |
-| <section></section>   | 定义文档中的节（section、区段）  |
-| <article></article>   | 定义页面独立的内容区域           |
-| <aside></aside>       | 定义页面的侧边栏内容             |
-| <detailes></detailes> | 用于描述文档或文档某个部分的细节 |
-| <summary></summary>   | 标签包含 details 元素的标题      |
-| <dialog></dialog>     | 定义对话框，比如提示框           |
 
- ##### e. 新的表单控件：
-
-HTML5 拥有多个新的表单 Input 输入类型。这些新特性提供了更好的输入控制和验证。
-
-| 输入类型       | 描述                         |
-| -------------- | ---------------------------- |
-| color          | 主要用于选取颜色             |
-| date           | 从一个日期选择器选择一个日期 |
-| datetime       | 选择一个日期（UTC 时间）     |
-| datetime-local | 选择一个日期和时间 (无时区)  |
-| email          | 包含 e-mail 地址的输入域     |
-| month          | 选择一个月份                 |
-| number         | 数值的输入域                 |
-| range          | 一定范围内数字值的输入域     |
-| search         | 用于搜索域                   |
-| tel            | 定义输入电话号码字段         |
-| time           | 选择一个时间                 |
-| url            | URL 地址的输入域             |
-| week           | 选择周和年                   |
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <!-- 选取颜色的 -->
-  <input type='color' value="#ff0878" id="color">
-
-  <!-- 选取日期 -->
-  <input type='date' id='date'>
-</body>
-<script type="text/javascript">
-  document.getElementById("date").onchange = function(e) {
-    console.log("date", e.target.value)
-  }
-  document.getElementById("color").onchange = function(e) {
-    console.log("color", e.target.value)
-  }
-</script>
-</html>
-```
-
- ##### f. 新的技术webworker,websockt、Geolocation；
+### 10. html5 新的技术：webworker,websockt、Geolocation；
 
 [webworker](http://www.ruanyifeng.com/blog/2018/07/web-worker.html)， [websockt](http://www.ruanyifeng.com/blog/2017/05/websocket.html)，[Geolocation](https://javascript.ruanyifeng.com/bom/window.html#toc21)
 
-### 3. html5哪些标签可以做SEO优化？
-
-​      title、meta、header、footer、nav、article、aside
-
-### 4. src和href的区别
+### 11. src 和 href的区别
 
 - src是指向外部资源的位置，指向的内容会嵌入到文档中当前标签所在的位置，在请求src资源时会将其指向的资源下载并应用到文档内，如js脚本，img图片和frame等元素。当浏览器解析到该元素时，会暂停其他资源的下载和处理，知道将该资源加载、编译、执行完毕，所以一般js脚本会放在底部而不是头部。
 - href是指网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的链接，用于超链接。
 
-### 5. 什么叫优雅降级和渐进增强？
+### 12. 什么叫优雅降级和渐进增强？
 
 - `渐进增强`：针对低版本浏览器进行构建页面，保证最基本的功能，然后再针对高级浏览器进行效果、交互等改进和追加功能，达到更好的用户体验。
 - `优雅降级`：一开始就构建完整的功能，然后再针对低版本的浏览器进行兼容。
 
-### 6. defer和async的区别
+### 13. defer和async的区别
 
 - `defer`要等到整个页面在内存中正常渲染结束（DOM结构完全生成，以及其他脚本执行完成），才会执行。多个defer脚本会按照它们在页面出现的顺序加载。==“渲染完再执行”==
 - `async`一旦下载完，渲染引擎就会中断渲染，执行这个脚本以后，再继续渲染。多个async脚本是不能保证加载顺序的。==“下载完就执行”==
 
-### 7. 各个浏览器的内核
+### 14. 各个浏览器的内核
 
 * IE:trident
 * 谷歌： 以前是webkit， 现在是Blink

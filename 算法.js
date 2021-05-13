@@ -108,3 +108,51 @@ function permutate(str) {
 }
 
 console.log(permutate("abc"));
+
+
+
+// 回文字符串
+// 使用api方式
+function isPalindrome(str) {
+  if (typeof str !== 'string') return;
+  return str.split("").reverse().join("") === str;
+}
+
+
+
+// 递归方式
+function isPalindrome (str) {
+  if (typeof str !== 'string') return;
+  let i = 0, j = str.length - 1;
+  while(i < j) {
+    if (str.charAt(i) === str.charAt(j)) {
+      i++;
+      j--;
+    } else {
+      return false
+    }
+  }
+  return true;
+}
+console.log("11", isPalindrome('abccba')) // true
+
+
+function lengthOfLongest(str) {
+  const subArr = [];
+  let max = 0;
+  for(let i = 0 ; i < str.length; i++ ) {
+    const index = subArr.indexOf(str.charAt(i))
+    console.log(str[i], index)
+
+    if (index === -1) {
+      subArr.push(str[i]);
+      //  Math.max 返回一组数据中较大的值
+      max = Math.max(subArr.length, max) 
+    } else {
+      subArr.splice(0, index)
+    }
+  }
+  return max
+}
+
+console.log(lengthOfLongest('abcabcbb'));
