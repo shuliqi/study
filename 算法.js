@@ -142,7 +142,6 @@ function lengthOfLongest(str) {
   let max = 0;
   for(let i = 0 ; i < str.length; i++ ) {
     const index = subArr.indexOf(str.charAt(i))
-    console.log(str[i], index)
 
     if (index === -1) {
       subArr.push(str[i]);
@@ -155,4 +154,38 @@ function lengthOfLongest(str) {
   return max
 }
 
-console.log(lengthOfLongest('abcabcbb'));
+console.log(lengthOfLongest('abcabcbb')); // 3
+
+
+
+
+// 最小栈
+function MinStack() {
+  this.items = [];
+  this.min = null;
+}
+MinStack.prototype.push = function (x) {
+  if (!this.min) this.min = x;
+  this.min = Math.min(x, this.min)
+  this.items.push(x);
+
+}
+MinStack.prototype.pop = function() {
+  this.items.pop();
+  this.min = Math.min(...this.items)
+};
+MinStack.prototype.top = function() {
+  return this.items[this.items.length - 1];
+}
+MinStack.prototype.getMin = function() {
+  return this.min;
+}
+
+const minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+console.log(minStack.getMin());   // --> 返回 -3.
+minStack.pop();
+console.log(minStack.top());      // --> 返回 0.
+console.log(minStack.getMin());   // --> 返回 -2.
