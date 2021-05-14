@@ -1,3 +1,7 @@
+# css面试题
+
+
+
 ### 1.盒子模型
 
 ![CSS box-model](https://www.runoob.com/images/box-model.gif)
@@ -18,11 +22,11 @@
 
 IE盒子模型： width包含了content ， pading 和 border：width = content.width+ + padding + border；
 
-box-sizing: 
+box-sizing:  定义如何计算一个元素的宽度和高度
 
-- border-box： 设置的宽度是多少就是多少， 即使加上 pading 和 border 也是一样的（加上 border + padding， 内容是减少的）
+- border-box： 设置的宽度会包含padding 和 border，实际的内容的宽度： width - border - height； --> 即使加上 pading 和 border 也是一样的（加上 border + padding， 内容是减少的）
 
-- content-box：(加上padding和border，content不会减少)，
+- content-box：默认值；设置的元素的宽度高度仅仅是内容的宽度和高度。不包含 padding 和 border；(加上padding和border，content不会减少)，
 
   
 
@@ -59,7 +63,6 @@ box-sizing:
        color:  red;
    }
    ```
-
 
 **属性选择器**：选取标签带有某些属性的选择器(^开始位置，$ 结束位置, *任意位置)
 
@@ -150,7 +153,7 @@ box-sizing:
 </html>
 ```
 
-
+> 伪类和伪元素的区别： https://www.jianshu.com/p/21eac04082d7。 伪类使用单冒号,而伪元素使用双冒号。
 
 #### 文字效果：
 
@@ -182,7 +185,7 @@ box-sizing:
 
   * line-through(穿过文本的一条线)
 
-  * blink(定义闪烁的文本
+  * blink(定义闪烁的文本)
 
 
 * **text-shadow**（h-shadow, v-shadow, blur, color）
@@ -244,18 +247,17 @@ box-sizing:
   /* 沿着x轴翻转30度，y轴翻转20度 */
   transform: skew(30deg, 20deg);
   
-  /* 沿着x轴翻转30度，y轴翻转20度 */
   transform: scale(2)
   ```
-
   
-
-* **animation**(动画函数，动画时间，动画曲线，动画次数(n)，是否反方向(alternate))
+  
+  
+* **animation**(动画函数，动画时间，动画曲线，延迟时间， 动画次数(n)，执行的方向
 
   * 动画曲线：linear（匀速）， ease（低速开始，然后加快，然后放慢结束），ease-in（低速开始），ease-out低速结束）， ease-in-out(低速开始和结束)
-  * 是否反方向： alternate 反方向 normal(默认值)
+  * 是否反方向：  normal(默认值);   reverse(反方向)， alternate(先正后反，交替)， alternate-reverse(先反后正，交替执行)
 
-  ```
+  ```css
     @keyframes move {
         0% { width: 100px }
         50% { width: 300px }

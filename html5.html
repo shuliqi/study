@@ -3,6 +3,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width-device-width initial-scale=1 maximum-scale=1 minimum-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <title>Document</title>
 </head>
 <style>
@@ -22,58 +23,26 @@
   }
 </style>
 <body>
-  <div class="header"></div>
-  <!-- <data value="1111">产品1</data>
-  <data value="2222">产品1</data>
-  <time datetime="2001-05-15 19:00">表示日期和时间，datetime来指定时间</time>
-  <mark>高亮文本</mark>
-
-
-  <video  src="https://www.w3school.com.cn/i/movie.ogg"
-          controls="controls" 
-          autoplay="autoplay"
-          loop="loop"
-          preload="preload"
-          muted="muted"
-          poster="http://p6.qhimg.com/t01f5a5270b7946b505.jpg"
-          height="100px"
-          width="200px">
-  </video> -->
-<!-- 
-  <audio  src="https://www.w3school.com.cn/i/movie.ogg"
-          loop="loop"
-          controls="controls"
-          preload="preload"
-          autoplay="autoplay"></audio> -->
-
-
-
-
-
-          asldaslkd你的浏览器不支持canvas标签你的浏览器不支持canvas标签你的浏览器不支持canvas标签
-          你的浏览器不支持canvas标签
-          你的浏览器不支持canvas标签你的浏览器不支持canvas标签你的浏览器不支持canvas标签
-          你的浏览器不支持canvas标签
-          <br>
-          你的浏览器不支持canvas标签你的浏览器不支持canvas标签你的浏览器不支持canvas标签
-          asd
-  <canvas  id="canvas">
-    <P>你的浏览器不支持canvas标签</P>
-  </canvas>
-
- <label for="name">年龄</label>
- <input type="text" id="name"/>
-<label>
-  年龄呀
-  <input type="text"/>
-</label>
-
-<a  href="javascrit:void(0)">asdasdasd</a>
+<div #="app"></div>
 </body>
 <script>
-  const canvas = document.getElementById("canvas");
-  const cxt = canvas.getContext("2d");
-  cxt.font = "48px serif";
-  cxt.fillText("shuliqi", 20, 50);
+  debugger
+  // 在 new Vue之前，进入debugger模式
+  // var app = new Vue({
+  //   el: '#app',
+  //   data: { message: 'Hello Vue!' }
+  // })
+
+  // 在 new Vue之前，进入debugger模式
+  debugger
+  // 定义一个名为 button-counter 的新组件
+  Vue.component('button-counter', {
+    data: function() {
+      return {
+        count: 0
+      }
+    },
+    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+  })
 </script>
 </html>
