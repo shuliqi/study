@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vue2.x生命周期学习</title>
+  <script src="https://cdn.bootcss.com/vue/2.4.2/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <span>这是外部的html模板:{{message}}</span>
+  </div>
+</body>
+ <script>
+   var vm = new Vue({
+      el: '#app',
+    	data: {
+        message: "老的数据"
+      },
+      beforeUpdate() {
+        console.log("--------beforeUpdate--------");
+        console.log("el:", this.$el);
+      },
+      updated() {
+        console.log("--------updated--------");
+        console.log("el:", this.$el);
+      }
+   })
+   vm.message = "新的数据";
+</script>
+</html>
