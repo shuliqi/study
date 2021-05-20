@@ -1,3 +1,4 @@
+const { Console } = require("node:console");
 
 // 冒泡排序
 function bubbleSort(arr) {
@@ -189,3 +190,39 @@ console.log(minStack.getMin());   // --> 返回 -3.
 minStack.pop();
 console.log(minStack.top());      // --> 返回 0.
 console.log(minStack.getMin());   // --> 返回 -2.
+
+function isvalid(str) {
+  const obj = {
+    '{':'}',
+    '[':']',
+    '(':')'
+  };
+  const stack = [];
+  for( let i = 0; i < str.lengt; i++) {
+    if (obj[str[i]] === str[i]) {
+      stack.push(str[i]);
+    } else if (str[i] !== obj[stack.pop()]) {
+      return false;
+    }
+  }
+  return stack.length === 0;
+}
+console.log(isvalid("([)]"));
+console.log(isvalid( "()"));
+console.log(isvalid('()[]{}'));
+console.log(isvalid( "(]"));
+
+console.log(isvalid( "()"));
+
+function deletStr(str) {
+  const stack = [str[0]];
+  for (let i = 1; i < str.length; i++) {
+    const popValue = stack.pop();
+    if ( popValue !== str[i]) {
+      stack.push(popValue);
+      stack.push(str[i]);
+    }
+  };
+  return stack.join("");
+}
+console.log(deletStr("abbaca"));
