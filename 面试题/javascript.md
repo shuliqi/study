@@ -4078,11 +4078,11 @@ function bar(){
 var salary = "1000$";
 
 (function () {
-    console.log("Original salary was " + salary);
+    console.log("111" + salary);
 
     var salary = "5000$";
 
-    console.log("My New Salary " + salary);
+    console.log("2222 " + salary);
 })();
 ```
 

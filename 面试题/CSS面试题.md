@@ -286,6 +286,16 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 
 选择用哪个css, 看权重的大小，权重大的优先使用， 如果权重相等， 那么按顺序来看， 在后面的回覆盖前面的。
 
+```
+#shu span {
+	color: red;
+}
+
+.shu li span {
+	color: yellow;
+}
+```
+
 
 
 ### 4.BFC 
