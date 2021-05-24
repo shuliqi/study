@@ -208,3 +208,25 @@ MyPeople.age = '子类属性';
 MyPeople.getName();  // 子类属性
 
 
+
+
+const obj = {
+  labelName: "标签"
+}
+obj.labelName = "更新标签名字"
+obj.labelName;
+
+const obj = {}
+let labelName;
+Object.defineProperty(obj, "labelName", {
+  get: function() {
+    console.log("获取标签名字");
+    return labelName;
+  },
+  set: function(newValue) {
+    console.log("设置新的标签名");
+    labelName = newValue
+  }
+})
+obj.labelName = "标签";
+console.log(obj.labelName);
