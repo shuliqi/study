@@ -11963,3 +11963,73 @@
   return Vue;
 
 }));
+
+
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+ var validPalindrome = function(s) {
+  let i = 0; j = s.length -1;
+  while(i < j) {
+      if (s[i] === s[j]) {
+          i++;
+          j--;
+      } else {
+          const s1 = s.substring(i, j);
+          const s2 = s.substring(i+1, j+1);
+          console.log(s1, s2)
+          return isPalindrome(s1) || isPalindrome(s2)
+      }
+  }
+  return true;
+};
+function isPalindrome(s) {
+  return s.split("").reverse().join("") ===  s;
+}
+// abbcdda
+log(validPalindrome("abccbbca"));
+
+
+
+
+var merge = function(nums1, m, nums2, n) {
+  nums1.splice(m, nums1.length - m);
+  nums2.splice(n,nums2.length - n);
+  nums1.splice(nums1.length -1, 0, ...nums2);
+  nums1.sort((a, b) => a -b);
+  return nums1;
+};
+
+console.log(merge([1,2,3,0,0,0],3,[2,5,6,7,8], 3))
+
+
+
+var addTwoNumbers = function(l1, l2) {
+  let head = null, tail = null;
+  let carry = 0;
+  while (l1 || l2) {
+      const n1 = l1 ? l1.val : 0;
+      const n2 = l2 ? l2.val : 0;
+      const sum = n1 + n2 + carry;
+      if (!head) {
+          head = tail = new ListNode(sum % 10);
+      } else {
+          tail.next = new ListNode(sum % 10);
+          tail = tail.next;
+      }
+      carry = Math.floor(sum / 10);
+      if (l1) {
+          l1 = l1.next;
+      }
+      if (l2) {
+          l2 = l2.next;
+      }
+  }
+  if (carry > 0) {
+      tail.next = new ListNode(carry);
+  }
+  return head;
+};
+console.log(addTwoNumbers([2,4,3], [5,6,4]))
