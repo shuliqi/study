@@ -11963,3 +11963,18 @@
   return Vue;
 
 }));
+
+
+
+var twoSum = function(nums, target) {
+  const map = new Map();
+  map.set(target - nums[0], 0);
+  for(let i = 1; i < nums.length; i++) {
+      if (map.has(nums[i])) {
+          return [map.get(nums[i]), i]
+      } else {
+          map.set(target - nums[i], i)
+      }
+  }
+};
+console.log(twoSum([3,2,4], 6))
