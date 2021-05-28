@@ -75,7 +75,6 @@ var addTwoNumbers = function(l1, l2) {
       if(l2) l2 = l2.next; // 遍历链表
       resNode.next = new ListNode(sum); // 将当前结果挂到临时的 node 上
       resNode = resNode.next; // 如果要继续挂载链表，需要将当前的指针移动到 next 上
-      console.log(resNode)
   }
   return result.next; // result 是 resNode, resNode.next 才是最终结果
 };
