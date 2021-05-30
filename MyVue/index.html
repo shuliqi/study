@@ -46,7 +46,22 @@
       el: "#app",
       data: {
         name: "舒丽琦",
+        list: ["1", "2", "3"]
       }
     })
+    vm.list[0] = "我改变了"
+    // 设置普调对象的值
+    vm.name = " 小小舒" 
+    // 获取普调对象的值
+    vm.name;
+
+    // 设置数组的值
+    vm.list.push("4");
+    // 获取数组的值
+    vm.list[0];
+
+    // 添加数组
+    vm.list.splice(3, 0,"哈哈哈", "怎么着")
+    console.log(vm.list);
   </script>
 </html>
