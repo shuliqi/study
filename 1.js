@@ -355,3 +355,43 @@ function setName() {
 const getName = setName();
 console.log('111', getName());
 // ReferenceError: name is not defined
+
+
+
+var scope = "global scope";
+function checkscope(){
+  var scope = "local scope";
+  function f(){
+    return scope;
+  }
+  return f();
+}
+console.log(checkscope());
+
+
+var a = "global";
+function foo() {
+  console.log(a);
+}
+function bar() {
+  var a = "local";
+  foo();
+}
+bar();
+
+
+var a = 10;
+function foo () {
+  var a = 20;
+  console.log(a);
+}
+foo();
+
+function foo(){
+  var a = 2;
+  function bar(){
+      console.log(a); 
+  }
+  bar();
+}
+foo();
