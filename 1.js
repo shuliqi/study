@@ -435,3 +435,16 @@ fn = null; // 手动释放 bar 的引用
 // bar 的引用 fn 被释放了，现在 f 的作用域也被释放了。num再次归零了。
 fn = add();
 fn(); // 1
+
+
+
+
+function Person() {
+  this.name = "shuliqi";
+  this.age = 12;
+}
+
+const person1 =  new Person();
+console.log(person1.constructor == Person);
+person1.__proto__ == Person.prototype;
+
