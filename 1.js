@@ -354,4 +354,84 @@ function setName() {
 }
 const getName = setName();
 console.log('111', getName());
+
 // ReferenceError: name is not defined
+
+
+let fn;
+function foo() {
+   var a = 1;
+   function getValue () {
+     console.log(a);
+   }
+   fn = getValue;
+}
+foo();
+fn(); // 1
+
+
+for (var i = 0; i <=  5; i++ ) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000)
+}
+
+
+for (let i=1; i <= 5; i++){
+  setTimeout(function(){
+    console.log(i);
+    },i*1000);
+}
+
+
+var box = {
+  age : 18,
+}
+box.age =  20;
+
+const bar = (function() {
+  var age = 18;
+  return {
+    addAge: function() {
+      ++age;
+    },
+    getAge: function()  {
+      console.log(age)
+    }
+  }
+})()
+bar.addAge();
+bar.getAge();
+
+
+add(3)(‘*’)(3); // 9
+
+
+function add(x) {
+  return function(y) {
+    return function(z) {
+     return x + y + z
+    }
+  }
+}
+console.log(add(1)(2)(3))
+
+
+function add() {
+  var n = 0;
+  function bar () {
+    n++;
+    console.log(n);
+  }
+  return  bar;
+}
+
+let fn = add(); // 得到内部函数bar的引用
+fn(); // 1
+fn(); // 2
+fn(); // 3
+fn = null; // 手动释放 bar 的引用
+ 
+// bar 的引用 fn 被释放了，现在 f 的作用域也被释放了。num再次归零了。
+fn = add();
+fn(); // 1
