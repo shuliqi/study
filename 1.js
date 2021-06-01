@@ -1,3 +1,4 @@
+import * as sdf from '@SDFoundation';
 const { reverse } = require("node:dns");
 
 var arrayList = ['a','b','c','d','e','f'];
@@ -395,3 +396,166 @@ function foo(){
   bar();
 }
 foo();
+
+
+
+const obj1= {};
+const obj2= new Object();
+const obj3 = new f1();
+console.log(typeof obj1); // object --> 普通对象
+console.log(typeof obj2); // object --> 普通对象
+console.log(typeof obj3)  // object --> 普通对象
+
+function f1() {}
+const f2 = function() {};
+const f3 = new Function();
+console.log(typeof Object);   // function --> 函数对象
+console.log(typeof Function); // function --> 函数对象
+console.log(typeof f1); // function --> 函数对象
+console.log(typeof f2); // function --> 函数对象
+console.log(typeof f3); // function --> 函数对象
+
+
+function f1() {}
+const f2 = function() {};
+console.log(f1 instanceof Function)
+console.log(f2 instanceof Function)
+
+
+
+function MyPerson(name, age) {
+  this.name = name; // 这个this 指的是 new 出来的实例
+  this.age = age; // 这个this 指的是 new 出来的实例
+}
+MyPerson.prototype = {
+  getName: function() {
+    return this.name;
+  }
+}
+const person1 = new MyPerson("舒丽琦", 18);
+console.log(person1.getName()); // 舒丽琦
+
+
+// 定义了一个对象 MyPerson
+function MyPerson(name, age) {
+  this.name = name;
+  this.age = age;
+}
+// MyPerson 的实例 person1
+const person1 = new MyPerson("舒丽琦", 18);
+
+console.log(person1.__proto__ === MyPerson.prototype); // true
+console.log(person1.constructor === MyPerson); // true
+console.log(MyPerson.prototype.constructor === MyPerson); // true
+
+
+const obj = {}
+console.log(obj.constructor === Object); // true
+console.log(obj.__proto__ === Object.prototype); // true
+
+const obj = new Object();
+console.log(obj.constructor === Object); // true
+console.log(obj.__proto__ === Object.prototype); // true
+
+const a = new Array();
+console.log(a.constructor === Array);  // true
+console.log(a.__proto__ === Array.prototype);  // true
+
+const s = new String();
+console.log(s.constructor === String);  // true
+console.log(s.__proto__ === String.prototype); // true
+
+const d = new Date();
+console.log(d.constructor === Date); // true
+console.log(d.__proto__ === Date.prototype); // true
+
+const f = new Function();
+console.log(f.constructor === Function); // true
+console.log(f.__proto__ === Function.prototype);  // true
+
+const n = new Number();
+console.log(n.constructor === Number);  // true
+console.log(n.__proto__ === Number.prototype);  // true
+
+const b = new Boolean();
+console.log(b.constructor === Boolean);  // true
+console.log(b.__proto__ === Boolean.prototype);  // true
+
+
+function Person() {};
+const person1 = new Person();
+
+console.log(typeof person1); // true
+console.log(Person.__proto__ === Function.prototype); // true
+console.log(Person.prototype.__proto__ === Object.prototype); // true
+console.log(Object.__proto__ === Function.prototype); // true
+console.log(Object.prototype.__proto__  === null); // true
+
+
+
+function MyPerson() {}
+console.log(typeof MyPerson.prototype ); // object
+
+
+function f1() {}
+console.log(f1.__proto__ === Function.prototype)
+
+
+
+var obj = {name: 'jack'}
+var arr = [1,2,3]
+var reg = /hello/g
+var date = new Date
+var err = new Error('exception')
+ 
+console.log(obj.__proto__ === Object.prototype) // true
+console.log(arr.__proto__ === Array.prototype)  // true
+console.log(reg.__proto__ === RegExp.prototype) // true
+console.log(RegExp.prototype === Object)
+console.log(date.__proto__ === Data)  // true
+console.log(err.__proto__ === )  // true
+
+
+function Person(){}
+var person1 = new Person();
+console.log(person1.__proto__ === Person.prototype); // true
+console.log(Person.prototype.__proto__ === Object.prototype) //true
+console.log(Object.prototype.__proto__) //null
+
+Person.__proto__ == Function.prototype; //true
+console.log(Function.prototype)// function(){} (空函数)
+
+
+
+
+
+var num = new Array()
+console.log(num.__proto__ == Array.prototype) // true
+console.log( Array.prototype.__proto__ == Object.prototype) // true
+console.log(Array.prototype) // [] (空数组)
+console.log(Object.prototype.__proto__) //null
+
+
+console.log(Array.__proto__ == )// true
+
+
+
+//  实现 call
+Function.prototype.myCall = function(obj, ...args) {
+  if (typeof this !== 'function') {
+    throw new Error("当前调用的不是函数");
+  }
+  const fn = Symbol();
+  obj[fn] = this;
+  obj[fn](...args);
+};
+const obj = {
+  name: "shuliqi",
+  age: 12,
+}
+function people(name, sex) {
+  this.name = name;
+  this.sex = sex;
+  console.log(this.age, this.sex, this.name)
+}
+people.myCall(obj, "shuliqi", "女");

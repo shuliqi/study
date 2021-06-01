@@ -1360,19 +1360,7 @@ console.log(object.getNameFunc()());
 
 ### 19 谈谈原型链的理解
 
-**prototype：**每个对象都有 prototype 属性，指向它自己原型对象，而当前的对象又可以是别的对象的原型对象，而原型对象也是对象，也有自己的原型对象。
-
-![image-20210102002020202](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210102002020202.png)
-
-\***\*proto**:**每个对象都有**proto\*\*属性，指向创建该对象的的构造函数原型。
-
-![image-20210102002315785](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210102002315785.png)
-
-**原型链：** **proto**将对象与原型连接起来， 形成了原型链。所有的函数和对象沿着**proto** 都能到达 Function，Functiond 的隐原型指向 Funtion.prototype，Funtion.prototype 的隐原型指向 Object.prototype, Object.prototype 的隐原型 指向 null，也就到了原型链的终点。
-
-![image-20210102003326123](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210102003326123.png)
-
-https://juejin.cn/post/6844903936365690894
+[JavaScript中的原型链](http://localhost:4000/2018/06/01/JavaScript%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE/#%E8%B0%83%E5%AF%B9%E8%B1%A1%E5%92%8C%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1)
 
 ### 19.call、apply 有什么区别？call,aplly 和 bind 的内部是如何实现的？
 
