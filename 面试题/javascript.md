@@ -1366,10 +1366,6 @@ console.log(object.getNameFunc()());
 
 [JavaScript中的原型链](http://localhost:4000/2018/06/01/JavaScript%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE/#%E8%B0%83%E5%AF%B9%E8%B1%A1%E5%92%8C%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1)
 
-
-
-![img](http://zencode.in/imgs/2/1.jpg)
-
 ### 19.call、apply 有什么区别？call,aplly 和 bind 的内部是如何实现的？
 
 call 和 apply 的功能相同，区别在于传参的方式不一样:

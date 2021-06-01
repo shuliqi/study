@@ -558,4 +558,85 @@ function people(name, sex) {
   this.sex = sex;
   console.log(this.age, this.sex, this.name)
 }
-people.myCall(obj, "shuliqi", "女");
+obj.myCall(obj, "shuliqi", "女");
+
+
+Function.prototype.myApply = function(obj, args) {
+  if (typeof this !== 'function') {
+    throw new Error("错误")
+  }
+  const fn =Symbol();
+  obj[fn] = this;
+  obj[fn](...args);
+}
+
+
+const obj = {
+  name: "shuliqi",
+  age: 12,
+}
+function people(name, sex) {
+  this.name = name;
+  this.sex = sex;
+  console.log(this.age, this.sex, this.name)
+}
+people.myApply(obj, ["shuliqi", "女"])
+
+
+Function.prototype.myBind = function(obj, argArr) {
+  if (typeof this !== 'function') {
+    throw new Error("错误")
+  }
+  const self  = this;
+  const fbound = function() {
+    const args = [...argArr, ...arguments];
+    // 作为构造函数：this 是指当前实例（testObj），self 是指绑定函数（people）。因为下面有一句： fbound.prototype = this.prototype;
+    // 已经修改了返回函数的prototype 为 绑定函数的 prototype。那么此时结果为true，this 应该指向实例
+
+    // 作为普通函数：this 指向 window，self 为绑定函数，此时：fbound.prototype 为  prototype
+    self.apply(this instanceof self ? this : obj, args);
+  }
+  
+  fbound.prototype = this.prototype;
+  return fbound
+}
+Function.prototype.bind2 = function (context) {
+  var self = this;
+  var args = Array.prototype.slice.call(arguments, 1);
+
+  var fbound = function () {
+
+      var bindArgs = Array.prototype.slice.call(arguments);
+      console.log("this:", this)
+      console.log("----");
+      console.log("self:", self);
+      debugger
+      console.log("=====", this.prototype)
+      // 当作为构造函数时，this 指向实例，self 指向绑定函数，因为下面一句 `fbound.prototype = this.prototype;`，
+      // 已经修改了 fbound.prototype 为 绑定函数的 prototype，此时结果为 true，当结果为 true 的时候，this 指向实例。
+      // 当作为普通函数时，this 指向 window，self 指向绑定函数，此时结果为 false，当结果为 false 的时候，this 指向绑定的 context。
+      self.apply(this instanceof self ? this : context, args.concat(bindArgs));
+  }
+  // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承函数的原型中的值
+  // 这里的this， 是指people（因为不是在return 函数里面）
+  fbound.prototype = this.prototype;
+  return fbound;
+}
+
+const obj = {
+  name: "shuliqi",
+  age: 12,
+}
+function people(name, sex, job) {
+  this.name = name;
+  this.sex = sex;
+  this.job = job;
+  console.log("age:", this.age)
+}
+people.prototype.lastNmae = "舒";
+
+const test  = people.bind2(obj, "shuliqi", "女");
+const testObj = new test("高级开发工程师");
+console.log(testObj.lastNmae)
+
+
