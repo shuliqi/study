@@ -1,3 +1,4 @@
+import * as sdf from '@SDFoundation';
 const { reverse } = require("node:dns");
 
 var arrayList = ['a','b','c','d','e','f'];
@@ -354,97 +355,207 @@ function setName() {
 }
 const getName = setName();
 console.log('111', getName());
-
 // ReferenceError: name is not defined
 
 
-let fn;
+
+var scope = "global scope";
+function checkscope(){
+  var scope = "local scope";
+  function f(){
+    return scope;
+  }
+  return f();
+}
+console.log(checkscope());
+
+
+var a = "global";
 function foo() {
-   var a = 1;
-   function getValue () {
-     console.log(a);
-   }
-   fn = getValue;
+  console.log(a);
+}
+function bar() {
+  var a = "local";
+  foo();
+}
+bar();
+
+
+var a = 10;
+function foo () {
+  var a = 20;
+  console.log(a);
 }
 foo();
-fn(); // 1
 
-
-for (var i = 0; i <=  5; i++ ) {
-  setTimeout(() => {
-    console.log(i)
-  }, 1000)
-}
-
-
-for (let i=1; i <= 5; i++){
-  setTimeout(function(){
-    console.log(i);
-    },i*1000);
-}
-
-
-var box = {
-  age : 18,
-}
-box.age =  20;
-
-const bar = (function() {
-  var age = 18;
-  return {
-    addAge: function() {
-      ++age;
-    },
-    getAge: function()  {
-      console.log(age)
-    }
+function foo(){
+  var a = 2;
+  function bar(){
+      console.log(a); 
   }
-})()
-bar.addAge();
-bar.getAge();
+  bar();
+}
+foo();
 
 
-add(3)(‘*’)(3); // 9
+
+const obj1= {};
+const obj2= new Object();
+const obj3 = new f1();
+console.log(typeof obj1); // object --> 普通对象
+console.log(typeof obj2); // object --> 普通对象
+console.log(typeof obj3)  // object --> 普通对象
+
+function f1() {}
+const f2 = function() {};
+const f3 = new Function();
+console.log(typeof Object);   // function --> 函数对象
+console.log(typeof Function); // function --> 函数对象
+console.log(typeof f1); // function --> 函数对象
+console.log(typeof f2); // function --> 函数对象
+console.log(typeof f3); // function --> 函数对象
 
 
-function add(x) {
-  return function(y) {
-    return function(z) {
-     return x + y + z
-    }
+function f1() {}
+const f2 = function() {};
+console.log(f1 instanceof Function)
+console.log(f2 instanceof Function)
+
+
+
+function MyPerson(name, age) {
+  this.name = name; // 这个this 指的是 new 出来的实例
+  this.age = age; // 这个this 指的是 new 出来的实例
+}
+MyPerson.prototype = {
+  getName: function() {
+    return this.name;
   }
 }
-console.log(add(1)(2)(3))
+const person1 = new MyPerson("舒丽琦", 18);
+console.log(person1.getName()); // 舒丽琦
 
 
-function add() {
-  var n = 0;
-  function bar () {
-    n++;
-    console.log(n);
-  }
-  return  bar;
+// 定义了一个对象 MyPerson
+function MyPerson(name, age) {
+  this.name = name;
+  this.age = age;
 }
+// MyPerson 的实例 person1
+const person1 = new MyPerson("舒丽琦", 18);
 
-let fn = add(); // 得到内部函数bar的引用
-fn(); // 1
-fn(); // 2
-fn(); // 3
-fn = null; // 手动释放 bar 的引用
+console.log(person1.__proto__ === MyPerson.prototype); // true
+console.log(person1.constructor === MyPerson); // true
+console.log(MyPerson.prototype.constructor === MyPerson); // true
+
+
+const obj = {}
+console.log(obj.constructor === Object); // true
+console.log(obj.__proto__ === Object.prototype); // true
+
+const obj = new Object();
+console.log(obj.constructor === Object); // true
+console.log(obj.__proto__ === Object.prototype); // true
+
+const a = new Array();
+console.log(a.constructor === Array);  // true
+console.log(a.__proto__ === Array.prototype);  // true
+
+const s = new String();
+console.log(s.constructor === String);  // true
+console.log(s.__proto__ === String.prototype); // true
+
+const d = new Date();
+console.log(d.constructor === Date); // true
+console.log(d.__proto__ === Date.prototype); // true
+
+const f = new Function();
+console.log(f.constructor === Function); // true
+console.log(f.__proto__ === Function.prototype);  // true
+
+const n = new Number();
+console.log(n.constructor === Number);  // true
+console.log(n.__proto__ === Number.prototype);  // true
+
+const b = new Boolean();
+console.log(b.constructor === Boolean);  // true
+console.log(b.__proto__ === Boolean.prototype);  // true
+
+
+function Person() {};
+const person1 = new Person();
+
+console.log(typeof person1); // true
+console.log(Person.__proto__ === Function.prototype); // true
+console.log(Person.prototype.__proto__ === Object.prototype); // true
+console.log(Object.__proto__ === Function.prototype); // true
+console.log(Object.prototype.__proto__  === null); // true
+
+
+
+function MyPerson() {}
+console.log(typeof MyPerson.prototype ); // object
+
+
+function f1() {}
+console.log(f1.__proto__ === Function.prototype)
+
+
+
+var obj = {name: 'jack'}
+var arr = [1,2,3]
+var reg = /hello/g
+var date = new Date
+var err = new Error('exception')
  
-// bar 的引用 fn 被释放了，现在 f 的作用域也被释放了。num再次归零了。
-fn = add();
-fn(); // 1
+console.log(obj.__proto__ === Object.prototype) // true
+console.log(arr.__proto__ === Array.prototype)  // true
+console.log(reg.__proto__ === RegExp.prototype) // true
+console.log(RegExp.prototype === Object)
+console.log(date.__proto__ === Data)  // true
+console.log(err.__proto__ === )  // true
+
+
+function Person(){}
+var person1 = new Person();
+console.log(person1.__proto__ === Person.prototype); // true
+console.log(Person.prototype.__proto__ === Object.prototype) //true
+console.log(Object.prototype.__proto__) //null
+
+Person.__proto__ == Function.prototype; //true
+console.log(Function.prototype)// function(){} (空函数)
 
 
 
 
-function Person() {
-  this.name = "shuliqi";
-  this.age = 12;
+
+var num = new Array()
+console.log(num.__proto__ == Array.prototype) // true
+console.log( Array.prototype.__proto__ == Object.prototype) // true
+console.log(Array.prototype) // [] (空数组)
+console.log(Object.prototype.__proto__) //null
+
+
+console.log(Array.__proto__ == )// true
+
+
+
+//  实现 call
+Function.prototype.myCall = function(obj, ...args) {
+  if (typeof this !== 'function') {
+    throw new Error("当前调用的不是函数");
+  }
+  const fn = Symbol();
+  obj[fn] = this;
+  obj[fn](...args);
+};
+const obj = {
+  name: "shuliqi",
+  age: 12,
 }
-
-const person1 =  new Person();
-console.log(person1.constructor == Person);
-person1.__proto__ == Person.prototype;
-
+function people(name, sex) {
+  this.name = name;
+  this.sex = sex;
+  console.log(this.age, this.sex, this.name)
+}
+people.myCall(obj, "shuliqi", "女");
