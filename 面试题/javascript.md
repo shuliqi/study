@@ -1301,148 +1301,11 @@ person.getName();
 
 ### 18.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？
 
-
+[JavaScript中的闭包](https://shuliqi.github.io/2018/10/23/JavaScript%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/)
 
 概念：当函数可以记住并且可以访问它所在的词法作用域，就产生了闭包，即使这个函数不在当前的作用域执行。
 
----
-
-
-
-闭包就是能够访问其他函数内部变量的函数；j s 语言特有的“链式作用作域“， 子级对象对一层一层的向上寻找父级的变量， 所以父级的变量子级都能访问， 反之，父级却不能访问到子级的变量。 那要是想要访问到怎么办呢？ 那就只能在子级里面在定一个函数， 然后 return 出来，那么 就可以访问了局部变量了。
-
-- 闭包的优点：可以重复使用变量，并且不会造成变量污染，变量可以保持存在内存里面。
-- 闭包的缺点：占用很多的内存，会导致网页性能变差，在 IE 下容易造成内存泄露。在外面也能改父级的变量。
-
-##### 变量作用域
-
-变量的作用域分为**全局变量**和**局部变量**（函数内部变量）
-
-Javascript 语言规定，函数内部可以直接读取全局变量。
-
-```javascript
-const name = "shuliqi";
-function getName() {
-  console.log(name);
-}
-getName();
-// shuliqi
-```
-
-在函数外部无法读取函数内部的变量。
-
-```javascript
-function setName() {
-  var name = "shuliqi";
-}
-setName();
-console.log(name);
-// 访问不到的
-```
-
-**注意：**在函数内部声明的变量，需要使用 var/const/let 定义变量。不然的话，声明的将是一个全局变量
-
-```javascript
-function setName() {
-  name = "shuliqi";
-}
-setName();
-console.log(name);
-// shuliqi
-```
-
-##### 如何从外部读取局部变量
-
-我们有时候需要得到函数内部的变量，但是正常情况下，是办不到的，只有通过变通的方式才能实现。
-
-实现的方式就是在函数的内部，在定义一个函数。
-
-```javascript
-function f1() {
-  var name = "shuliqi";
-  function f2() {
-    console.log(name);
-  }
-}
-```
-
-上面的代码中，函数 f2 被包括在 f1 内部，f1 内部的所有局部变量，对于 f2 都是可见的，但是反过来就不行，f2 内部的局部变量对于 f1 都是不可见的。这就是 Javascript 语言特有的"链式作用域"结构（chain scope），子对象会一级一级地向上寻找所有父对象的变量。所以，父对象的所有变量，对子对象都是可见的，反之则不成立。
-
-既然 f2 能可以读取 f1 的局部变量，那么只需要把 f2 作为返回值，不就可以访问了？
-
-```javascript
-function f1() {
-  var name = "shuliqi";
-  function f2() {
-    console.log(name);
-  }
-  return f2;
-}
-f1()();
-
-// 或者
-
-function f1() {
-  var name = "shuliqi";
-  function f2() {
-    console.log(name);
-  }
-  return f2();
-}
-f1();
-```
-
-----
-
-
-
-##### 闭包的概念
-
-> 闭包就是能够读取其他函数内部变量的函数
-
-由于在 Javascript 语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成"定义在一个函数内部的函数"。
-
-所以，在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。
-
-##### 闭包的用途
-
-- 可以读取函数内部的变量
-
-- 内部变量能够始终保存在内存中
-
-  ```javascript
-  function f1() {
-    var n = 999;
-    nAdd = function() {
-      n += 1;
-    };
-    function f2() {
-      console.log(n);
-    }
-    return f2;
-  }
-  
-  var result = f1();
-  
-  result(); // 999
-  
-  nAdd();
-  
-  result(); // 1000
-  ```
-
-  在这段代码中，result 实际上就是闭包 f2 函数。它一共运行了两次，第一次的值是 999，第二次的值是 1000。这证明了，函数 f1 中的局部变量 n 一直保存在内存中，并没有在 f1 调用后被自动清除。
-
-  为什么会这样呢？原因就在于 f1 是 f2 的父函数，而 f2 被赋给了一个全局变量，这导致 f2 始终在内存中，而 f2 的存在依赖于 f1，因此 f1 也始终在内存中，不会在调用结束后，被垃圾回收机制（garbage collection）回收。
-
-  这段代码中另一个值得注意的地方，就是"nAdd=function(){n+=1}"这一行，首先在 nAdd 前面没有使用 var 关键字，因此 nAdd 是一个全局变量，而不是局部变量。其次，nAdd 的值是一个匿名函数（anonymous function），而这个匿名函数本身也是一个闭包，所以 nAdd 相当于是一个 setter，可以在函数外部对函数内部的局部变量进行操作。
-
-##### 使用闭包注意的点
-
-- 由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在 IE 中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。
-- 闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。
-
-##### 测试
+##### 测试掌握了没
 
 ```javascript
 var name = "The Window";
@@ -1494,8 +1357,6 @@ console.log(object.getNameFunc()());
 结果： My Object
 
 解析：getNameFunc 函数中的 this 是指向当前的 object,被赋值给了 getNameFunc 函数中的局部变量 that。getNameFunc 函数返回了一个函数，形成了一个闭包，导致当前局部变量 that 一直记在内存中，没有被垃圾回收。 所有执行这个返回的函数的时候 that 局部变量就是当前的 object 对象，所以输出了 object 的那么属性。
-
-http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
 
 ### 19 谈谈原型链的理解
 
