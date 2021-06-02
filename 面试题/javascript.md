@@ -1572,38 +1572,126 @@ https://blog.csdn.net/tangzhl/article/details/79669461
 https://zhuanlan.zhihu.com/p/38968174
 
 ```javascript
-Function.prototype.MyBind = function(thisObj, ...args) {
-  const _this = this;
+Function.prototype.MyBind = function(context, ...args) {
+  if (typeof this !== 'function') {
+    throw Error("错误");
+  }
+  const that = this;
   const bound = function() {
-    _this.apply(this instanceof _this ? this : thisObj, [
-      ...args,
-      ...arguments,
-    ]);
-  };
-  // 每次绑定的时候，将绑定函数 fBound 的原型指向原函数的原型，如果 new 调用绑定函数，得到的实例的原型，也是原函数的原型。这样在 new 执行过程中，执行绑定函数的时候对 this 的判断就可以判断出是否是 new 操作符调用
+    // 使用apply 修改作用域
+
+    // 作为构造函数。this 指向实例， that 指向绑定的函数，因为下面有一句：bound.prototype = this.prototype; 所以结果为 true、 this 指向实例
+    // 作为普通函数，this 指向window, that 指向绑定的函数，此时为 false， this 指向 context
+    that.apply(this instanceof that ? this : context, [...args, ...arguments] )
+  }
+  // 修改返回函数的 prototype 为 绑定函数 prototype.
+  // 这里的 this 是绑定函数
   bound.prototype = this.prototype;
+
+  // 使用闭包： 使得这个函数的引用在当前的词法作用域之外执行也持有这个词法作用域的引用
   return bound;
-};
+}
 const obj = {
   name: "shuliqi",
-};
-function setName(name, sex) {
+  age: 12,
+}
+function people(name, sex, job) {
   this.name = name;
   this.sex = sex;
+  this.job = job;
+  console.log("age:", this.age, this)
 }
-const test = setName.MyBind(obj, "shuliqi");
-test("女");
-console.log(obj.name, obj.sex);
+people.prototype.lastNmae = "舒";
 
-const newObj = new test();
-console.log(newObj);
+const test  = people.MyBind(obj, "shuliqi", "女");
+const testObj = new test("高级开发工程师");
 ```
 
 ### 20.什么是函数柯里化？实现 sum(1)(2)(3) 返回结果是 1,2,3 之和
 
-https://shuliqi.github.io/shuliqi.github.io/2018/10/05/%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96/
+```javascript
+function sum(x) {
+  return function(y) {
+    return function(z) {
+      return x + y + z;
+    }
+  }
+}
+// 采用闭包，将函数返回，使其持有多当前词法作用域的引用
+console.log(sum(1)(2)(3)); // 6
+```
+
+[函数柯里化](https://shuliqi.github.io/2018/10/05/%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96/)
+
+```javascript
+
+function curry(fn, args = []) {
+  return function() {
+    const rest = [...args, ...arguments];
+    // 如果当前的参数小于 函数的 参数， 那么继续递归 返回一个函数
+    if (rest.length < fn.length) {
+      return curry(fn, rest);
+    } else {
+      // 执行函数， 执行完之后， 得把值返回回去
+      return fn.apply(null, rest);
+    }
+  }
+}
+
+function sum(x,y,z) {
+  return x +y + z;
+};
+const addCurry = curry(sum);
+console.log(addCurry(1)(2)(3)); // 6
+```
+
+
 
 ### 21.截流和防抖函数
+
+```javascript
+function debounce(fn, wait, immadiate) {
+   let timer = null; 
+   let context, args;
+   const later = function() {
+     if (!immadiate) {
+        timer = setTimeout(() => {
+          fn.apply(context, args);
+          context = args = null;
+        }, wait)
+     }
+   }
+
+  return function() {
+    if (timer) {
+      // 不是首次进入
+      clearTimeout(timer);
+      later();
+    } else {
+      // 首次进入
+      if (immadiate) {
+        // 如果immadiate: true, 那么立即执行函数
+        fn.apply(this, [...arguments]);
+      } else {
+        context = this;
+        args = [...arguments];
+        later();
+      }
+    }
+  }
+}
+
+function handle() {
+  console.log("111");
+}
+window.addEventListener('resize', debounce(handle, 1000, false))
+```
+
+
+
+
+
+
 
 [https://shuliqi.github.io/2018/04/16/Debounce%E5%92%8CThrottle%E7%9A%84%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/](https://shuliqi.github.io/2018/04/16/Debounce和Throttle的原理及实现/)
 

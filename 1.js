@@ -623,6 +623,28 @@ Function.prototype.bind2 = function (context) {
   return fbound;
 }
 
+
+
+
+Function.prototype.MyBind = function(context, ...args) {
+  if (typeof this !== 'function') {
+    throw Error("错误");
+  }
+  const that = this;
+  const bound = function() {
+    // 使用apply 修改作用域
+
+    // 作为构造函数。this 指向实例， that 指向绑定的函数，因为下面有一句：bound.prototype = this.prototype; 所以结果为 true、 this 指向实例
+    // 作为普通函数，this 指向window, that 指向绑定的函数，此时为 false， this 指向 context
+    that.apply(this instanceof that ? this : context, [...args, ...arguments] )
+  }
+  // 修改返回函数的 prototype 为 绑定函数 prototype.
+  // 这里的 this 是绑定函数
+  bound.prototype = this.prototype;
+
+  // 使用闭包： 使得这个函数的引用在当前的词法作用域之外执行也持有这个词法作用域的引用
+  return bound;
+}
 const obj = {
   name: "shuliqi",
   age: 12,
@@ -631,12 +653,190 @@ function people(name, sex, job) {
   this.name = name;
   this.sex = sex;
   this.job = job;
-  console.log("age:", this.age)
+  console.log("age:", this.age, this)
 }
 people.prototype.lastNmae = "舒";
 
-const test  = people.bind2(obj, "shuliqi", "女");
+const test  = people.MyBind(obj, "shuliqi", "女");
 const testObj = new test("高级开发工程师");
-console.log(testObj.lastNmae)
 
 
+// sum(1)(2)(3)
+
+
+function sum(x) {
+  return function(y) {
+    return function(z) {
+      return x + y + z;
+    }
+  }
+}
+// 采用闭包，将函数返回，使其持有多当前词法作用域的引用
+console.log(sum(1)(2)(3)); // 6
+
+function curry(fn, args = []) {
+  return function () {
+    const rest = [...args, ...arguments];
+    if (rest.length < fn.length) {
+      return curry(fn, rest);
+    } else {
+      return fn.apply(null, rest);
+    }
+  }
+}
+
+function sum(x,y,z) {
+  return x +y + z;
+};
+const addCurry = curry(sum);
+console.log(addCurry(1)(2)(3)); // 6
+
+
+
+
+Function.prototype.myBind = function(context, ...args) {
+  if (typeof this !== 'function') {
+    return;
+  }
+  const that = this;
+  // 使用闭包
+  const bound = function() {
+    // 作为构造函数， this 表示实例。that 表示绑定函数。这时候 this instanceof that 为true。那么执行的函数的 this 应该指向 实例（）。
+    // 作为普调函数，this 表示 window， that 表示绑定函数，这时候 this instanceof that 为false，那么执行的函数的 this 应该指向 我们传进来的context。
+    that.apply(this instanceof that ? this : context, [ ...args, ...arguments])
+  }
+  // this表示 绑定的函数; 修改返回的函数的 prototype  为绑定安函数的 prototype
+  bound.prototype = this.prototype;
+  return bound;
+}
+
+const obj = {
+  name: "shulioqi",
+  age: 12
+}
+
+function people(name, sex, job) {
+  this.job = job
+}
+
+const test = people.myBind(obj, "舒丽琦", "女");
+const shu = new test("高级开发");
+console.log("---", shu.name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function debounce(fn, wait, immadiate) {
+   let timer = null; 
+   let context, args;
+   const later = function() {
+     if (!immadiate) {
+        timer = setTimeout(() => {
+          fn.apply(context, args);
+          context = args = null;
+        }, wait)
+     }
+   }
+
+  return function() {
+    if (timer) {
+      // 不是首次进入
+      clearTimeout(timer);
+      later();
+    } else {
+      // 首次进入
+      if (immadiate) {
+        // 如果immadiate: true, 那么立即执行函数
+        fn.apply(this, [...arguments]);
+      } else {
+        context = this;
+        args = [...arguments];
+        later();
+      }
+    }
+  }
+}
+
+
+
+function throttle(fn, wait) {
+  let context = null, args, start = 0;
+  return function () {
+    const now = (new Date()).getTime();
+    if (!start) {
+      start = now
+    } else {
+      const remainning = wait - (now - start);
+      if (remainning <= 0) {
+        // 执行函数
+        fn.apply(context, args);
+        start = now;
+        context = args = null;
+      } else {
+        context = this;
+        args = arguments;
+      }
+    }
+
+  }
+}
+
+// function throttle(func, wait) {
+//   let context, args;
+//   // 设置前一个函数调用的时间戳
+//   let previous = 0;
+//   return function() {
+//     let now = new Date().getTime();
+//     if (!previous) {
+//       // 首次进入
+//       previous = now;
+     
+//     } else {
+//       context = this;
+//       args = arguments;
+//       let remaining = wait - (now - previous);
+//       if (remaining <= 0) {
+//         func.apply(context, args);
+//         previous = now;
+//         context = args = null;
+//       }
+//     }
+//   }
+// }
+
+function throttle(fn, wait) {
+  let context = null, args, start = 0;
+  return function () {
+    const now = (new Date()).getTime();
+    if (!start) {
+      start = now
+    } else {
+      const remainning = wait - (now - start);
+      if (remainning <= 0) {
+        // 执行函数
+        fn.apply(context, args);
+        start = now;
+        context = args = null;
+      } else {
+        context = this;
+        args = arguments;
+      }
+    }
+
+  }
+}
+
+function handle() {
+  console.log("111");
+}
+window.addEventListener('resize', throttle(handle, 1000))
