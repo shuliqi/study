@@ -844,32 +844,63 @@ window.addEventListener('resize', throttle(handle, 1000))
 
 
 var spiralOrder = function(matrix) {
-  if (!matrix.length || !matrix[0].length) {
-      return [];
+  if (matrix.length <= 0  && matrix[0].length <= 0 ) {
+    return;
+  }
+  // 行数
+  let rows = matrix.length;
+  // 列数
+  let columns = matrix[0].length;
+
+  const order = [];
+
+  let left = 0, top = 0, right = columns - 1, bottom = rows - 1;
+  console.log('111')
+
+  while( left <= right && top <= bottom) {
+    // 上边变的数据
+    for (let colums = left; colums <=  right; colums++) {
+      order.push(matrix[top][colums]);
+    }
+
+    // 左边的数据
+    for (let row = top; row <=  bottom; row++) {
+      order.push(matrix[row][right]);
+    }
+    if (left <  right && top < bottom) {
+          // 下边的数据
+        for (let columns = right - 1; columns > left; columns--) {
+          order.push(matrix[bottom][columns]);
+        }
+
+
+        // 左边的数据
+        for (let row = bottom; row > left; row--) {
+          order.push(matrix[row][left]);
+        }
+    }
+
+    [left, right, top, bottom ] = [ left + 1, right - 1, top + 1, bottom - 1];
   }
 
-  const rows = matrix.length, columns = matrix[0].length;
-  const order = [];
-  let left = 0, right = columns - 1, top = 0, bottom = rows - 1;
-  while (left <= right && top <= bottom) {
-      for (let column = left; column <= right; column++) {
-          order.push(matrix[top][column]);
-      }
-      for (let row = top + 1; row <= bottom; row++) {
-          order.push(matrix[row][right]);
-      }
-      console.log(left, right, top, bottom)
-      if (left < right && top < bottom) {
-          for (let column = right - 1; column > left; column--) {
-              order.push(matrix[bottom][column]);
-          }
-          for (let row = bottom; row > top; row--) {
-              order.push(matrix[row][left]);
-          }
-      }
-      [left, right, top, bottom] = [left + 1, right - 1, top + 1, bottom - 1];
-  }
   return order;
 };
 
 console.log(spiralOrder([[1,2,3],[4,5,6],[7,8,9]]))
+
+
+
+
+var findMedianSortedArrays = function(nums1, nums2) {
+  const newArr = nums1.concat(nums2);
+  newArr.sort((a, b) => a - b);
+  console.log(newArr);
+  const len = newArr.length;
+  if (len % 2 === 0) {
+      return (newArr[len / 2] + newArr[(len / 2 - 1)]) / 2;
+  } else {
+    const temp = Math.floor(len / 2);
+      return newArr[temp];
+  }
+};
+console.log(findMedianSortedArrays([1,3], [2]))
