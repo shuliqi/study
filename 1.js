@@ -888,19 +888,141 @@ var spiralOrder = function(matrix) {
 
 console.log(spiralOrder([[1,2,3],[4,5,6],[7,8,9]]))
 
-
-
-
-var findMedianSortedArrays = function(nums1, nums2) {
-  const newArr = nums1.concat(nums2);
-  newArr.sort((a, b) => a - b);
-  console.log(newArr);
-  const len = newArr.length;
-  if (len % 2 === 0) {
-      return (newArr[len / 2] + newArr[(len / 2 - 1)]) / 2;
-  } else {
-    const temp = Math.floor(len / 2);
-      return newArr[temp];
+// 原型链继承：将子类的 prototype 属性指向 父类的实例
+// 实例和原型都继承到了
+// 但是子类无法向父类传递参数
+function Parent(name) {
+  this.name = name;
+  this.getName = function() {
+    console.log(this.name);
   }
+}
+
+Parent.prototype = {
+  age: 12,
+  getAge: function() {
+    console.log(this.age)
+  }
+}
+
+function Child() {};
+Child.prototype = new Parent("shuliqi")
+
+const myChild = new Child();
+myChild.getName(), 
+myChild.getAge();
+
+
+// 构造方法继承
+// 上一种方法 子类无法向父类提供参数，那么我们可以在子类的构造函数里面继承在执行一次构造函数，是不是就可以传递过去了？
+// 但是这种方式继承有一个缺点：就是无法继承父类的原型
+function Parent(name) {
+  this.name = name;
+  this.getName = function() {
+    console.log(this.name);
+  }
+}
+
+Parent.prototype = {
+  age: 12,
+  getAge: function() {
+    console.log(this.age)
+  }
+}
+
+function Child(name) {
+  //  执行父类的构造函数， 并且可以子类的参数传递过去
+  Parent.call(this, name);
 };
-console.log(findMedianSortedArrays([1,3], [2]))
+
+// 子类的 prototype 属性 指向 Parent 的实例
+const myChild = new Child("舒小花");
+myChild.getName(), 
+myChild.getAge(); // 会报错， 没有集成到
+
+
+// 组合式
+//  为了解决上面的 不能继承父类的原型， 我们可以第一种方式和第二种方式结合起来
+// 但是这种的方式有一个缺点：那就是实例执行了两次， 属性和方法被构造了两次，暂用内存
+function Parent(name) {
+  this.name = name;
+  this.getName = function() {
+    console.log(this.name);
+  }
+}
+
+Parent.prototype = {
+  age: 12,
+  getAge: function() {
+    console.log(this.age)
+  }
+}
+
+function Child(name) {
+  //  执行父类的构造函数， 并且可以子类的参数传递过去
+  Parent.call(this, name);
+};
+// 子类的 prototype 属性指向父类的实例
+Child.prototype = new Parent();
+
+const myChild = new Child("舒小花");
+myChild.getName(),  // 舒小花  实例也集成到了
+myChild.getAge();   // 12 原型继承到了
+
+
+// 寄生式继承
+// 为了解决上面的这个问题： 既然是 子类的 prototype 属性指向父类的实例 的时候， 父类的构造函数有构造的。那么
+// 假如 我们 是 子类的 prototype 属性 指向一个构造函数没有任何东西， 只是继承了父类的原型的构造函数，是不是实例就不会有两份了
+function Parent(name) {
+  this.name = name;
+  this.getName = function() {
+    console.log(this.name);
+  }
+}
+
+Parent.prototype = {
+  age: 12,
+  getAge: function() {
+    console.log(this.age)
+  }
+}
+
+function Child(name) {
+  //  执行父类的构造函数， 并且可以子类的参数传递过去
+  Parent.call(this, name);
+};
+const fn = function() {};
+fn.prototype = Parent.prototype;
+Child.prototype = new fn();
+
+const myChild = new Child("舒小花");
+myChild.getName(),  // 舒小花  实例也集成到了
+myChild.getAge();   // 12 原型继承到了
+
+
+// 实例继承: 最简单的方式
+function Parent(name) {
+  this.name = name;
+  this.getName = function() {
+    console.log(this.name);
+  }
+}
+
+Parent.prototype = {
+  age: 12,
+  getAge: function() {
+    console.log(this.age)
+  }
+}
+
+function Child(name) {
+  const instance = new Parent(name);
+  instance.job = "高级开发";
+  return instance;
+}
+
+
+const myChild = new Child("舒小花");
+myChild.getName(),  // 舒小花  实例也集成到了
+myChild.getAge();   // 12 原型继承到了
+console.log(myChild.job);
