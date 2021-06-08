@@ -2249,7 +2249,7 @@ const ajax = (method, url, async, data) => {
 
 ##### 标记清除
 
-垃圾收集齐会在当所有的变量进入环境的时候都标记一下，例如"进入环境"， **去除环境中的变量以及被环境中的变量引用的变量**。再此之后再被标记上的就是待释放内存的变量。
+垃圾收集器会在当所有的变量进入环境的时候都标记一下，例如"进入环境"， **去除环境中的变量以及被环境中的变量引用的变量**。再此之后再被标记上的就是待释放内存的变量。
 
 ##### 引用计数
 
@@ -2263,9 +2263,9 @@ eval()方法就是解析并且执行 js 字符串
 
 ## 30 如何监听对象的属性
 
-#### ES5 :Object.defineProperty()
+#### [ES5 :Object.defineProperty()](https://shuliqi.github.io/2018/02/19/%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Object-defineProperty/)
 
-#### new Proxy()
+#### [new Proxy()](https://shuliqi.github.io/2018/03/05/ES6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Proxy/#get-%E6%96%B9%E6%B3%95)
 
 ### 31 如何实现私有变量
 
@@ -2286,21 +2286,38 @@ console.log(pclass.age); // 变量age，外部可以访问
 
 ### 32 new 操作符都干了什么
 
-1. 创建一个新的函数
-2. 将构造函数的作用域指向新的函数（将 this 值指向新的函数）fn**proto** = Fn.prototype
-3. 自执行构造函数的代码（是为了把属性和方法给新的函数）call(). apply 方式
-4. 返回新的函数
+```javascript
+var fn = function () { };
+var fnObj = new fn();
+```
 
-##### 首先先来明确一下步骤：
+- 创建一个空对象
 
-1. 创建一个全新的空对象；
-2. 把这个对象内置的的原型引用指向到构造函数的 prototype 属性所引用的对象上；
-3. 将函数中的 this 对象指向这个全新的对象并且执行构造函数。
-4. 如果函数 return 出去的是一个引用类型的值，则返回这个值；否则就 return 这个全新的对象。
+  ```javascript
+  const obj = new Object();
+  ```
 
-##### 下面来举个例子说明一下
+- 空对象的\__proto__指向指向构造函数的 prototyp（继承原型）
 
-假设我们要`let person = new Person()`，编译器首先会创建一个全新的空对象 let person = {}，然后用 person 继承 Person 的原型链`person.__proto__ = Person.prototype`，再然后是将 Person 中的 this 指向这个全新的对象，并且执行构造函数中的代码，最后看函数如果 return 了其他值则直接 return 这个值，否则直接 return 这个全新的对象。
+  ```javascript
+  obj.__prpto__ = fn.prototype;
+  ```
+  
+- 将构造函数的this指向obj，并且执行（目的是为了得到实例上的属性和方法）
+
+  ```javascript
+  const result = fn.call(obj);
+  ```
+  
+- 如何构造函数有返回对象， 则返回该对象。如果没有则返新创建的obj
+
+  ```javascript
+  if ( typeof result === 'object') {
+  	return result
+  } else {
+  	return obj;
+  }
+  ```
 
 ### 33 数组去重
 
@@ -2560,15 +2577,87 @@ sleep(1000)
 
 js 的任务大致分为同步宏任务，异步微任务， 异步宏任务，
 
-js 的主线程会首先执行同步的宏任务，如果遇到异步（微任务和宏任务）的任务，就挂起来， 有结果的时候就放在异步微任务队列和异步宏任务队列，同步宏任务执行完， 就去执行异步微任务的里面的任务，最后执行异步宏任务里面的队列。
-
-时间循环也就是 javascriptde 的运行机制，运行机制也就是为了解决 js 实现异步操作。
-
 宏任务： 全部的 javscript 代码(同步)， setTimeout(异步)， setInterval(异步)。I/O,浏览器的 render 等
 
 微任务：promise，process，nextTICK
 
 事件循环的机制：同步宏任务--> 微任务 promise---> 微任务 process，nexttick ----> 异步宏任务
+
+解释：主线程从上到下执行代码， 遇到同步的宏任务就执行， 遇到微任务（先进先出）就把人物放到微任务队列里面去。遇到异步的宏任务就放到宏任务的队列里面去。当同步宏任务执行完毕，执行栈（先进后出）为空。就执行微任务队列里面的任务， 执行完毕在执行异步宏任务里面的任务。
+
+> 很多人以为await会一直等待之后的表达式执行完之后才会继续执行后面的代码，**实际上await是一个让出线程的标志**。`await后面的表达式会先执行一遍，将await后面的代码加入到w微任务中`，然后就会跳出整个async函数来执行后面的代码。
+>
+> 由于因为async await 本身就是promise+generator的语法糖。所以await后面的代码是microtask。[从async/await面试题看宏观任务和微观任务](https://cloud.tencent.com/developer/article/1745948)
+
+测试：
+
+```javascript
+async function async1() {
+  console.log('async1 start')
+  await async2()
+  console.log('async1 end')
+}
+async function async2() {
+  new Promise(resolve => {
+      console.log('promise1')
+      resolve()
+    })
+    .then(() => {
+      console.log('promise2')
+    })
+}
+console.log('script start')
+setTimeout(() => {
+  console.log('setTimeout')
+}, 0);
+async1()
+new Promise(resolve => {
+    console.log('promise3')
+    resolve()
+  })
+  .then(() => {
+    console.log('promise4')
+  })
+console.log('script end')
+```
+
+----
+
+
+
+```javascript
+async function async1() {
+  console.log('1')
+  await async2()
+  console.log('2)
+}
+async function async2() {
+  new Promise(resolve => {
+      console.log(3')
+      resolve()
+    })
+    .then(() => {
+      console.log('4')
+    })
+}
+console.log('5')
+setTimeout(() => {
+  console.log('6')
+}, 0);
+async1()
+new Promise(resolve => {
+    console.log('7')
+    resolve()
+  })
+  .then(() => {
+    console.log('8')
+  })
+console.log('9')
+```
+
+----
+
+
 
 ```javascript
 console.log("1");
@@ -2578,9 +2667,15 @@ setTimeout(function() {
 console.log("3");
 ```
 
+
+
 输出的结果， 1， 3， 2
 
 同步宏任务 1， 3 ----> 微任务（无）----> 异步宏任务（2）
+
+----
+
+ 
 
 ```javascript
 process.nextTick(function() {
