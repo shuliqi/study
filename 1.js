@@ -1,5 +1,5 @@
 import * as sdf from '@SDFoundation';
-const { reverse } = require("node:dns");
+const { reverse, resolve } = require("node:dns");
 
 var arrayList = ['a','b','c','d','e','f'];
 arrayList.splice(0, arrayList.length);
@@ -1026,3 +1026,164 @@ const myChild = new Child("舒小花");
 myChild.getName(),  // 舒小花  实例也集成到了
 myChild.getAge();   // 12 原型继承到了
 console.log(myChild.job);
+
+
+const p1 = new Promise((resolve, reject) => {
+  console.log("立即执行")
+})
+
+
+
+
+
+
+
+
+
+function MyPromise(executor) {
+  const self = this;
+  // 默认状态
+  self.status = "pending";
+  self.value;
+  self.reason;
+
+  // 为了实现异步， 需要要把成功回调和失败回调保存起来
+  // 用来保存then 方法中，第一个参数
+  self.onResolveCallBack = [];
+
+  // 用来保存then 方法中，第二个参数
+   self.onRejectCallback = [];
+
+  function resolve(value) {
+    // 状态一旦改变，则不会再改变了
+    if ( self.status  === 'pending') {
+
+      // 修改状态
+      self.status = "fulfilled";
+
+      // 置值
+      self.value = value;
+
+      // 当置值器置值之后， 我们就应该把把保存起来的成功回调执行
+      self.onResolveCallBack.forEach((fn) => {
+        fn();
+      })
+    }
+  }
+
+  function reject(reason) {
+    // 状态一旦改变，则不会再改变了
+    if ( self.status  === 'pending') {
+      
+      // 修改状态
+       self.status = "rejected";
+
+       // 置值
+       self.reason = reason;
+
+        // 当置值器置值之后， 我们就应该把把保存起来的成功回调执行
+      self.onRejectCallback.forEach((fn) => {
+        fn();
+      })
+    }
+  }
+
+  executor(resolve, reject)
+}
+
+
+MyPromise.prototype.then = function(onFulfilled, onRejected) {
+  const self = this;
+
+      // 因为链式可以一直链下去， 是因为返回的也是promise
+      return new Promise((resolve, reject) => {
+
+      /**
+       * 如果在resove，reject置值器是在异步任务中，那么调 
+       * .then的时候是没办法知道要执行成功回调还是失败回调，所以将回调保存起来， 供之后再调用
+      */
+      if (self.status === 'pending') {
+        self.onResolveCallBack.push(() => {
+          try {
+             const result = onFulfilled(self.value);
+             resolve(result)
+          } catch (error) {
+            reject(error);
+          }
+        });
+        self.onRejectCallback.push(() => {
+          try {
+            const result = onRejected(self.value);
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          } 
+        });
+      }
+
+      // 成功回调
+      if (self.status === 'fulfilled') {
+        try {
+          const result =  onFulfilled(self.value);
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      }
+
+      if (self.status === 'rejected') {
+        try {
+          const result = onRejected(self.reason);
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+        
+      }
+  })
+
+
+}
+
+
+MyPromise.prototype.catch = function() {
+
+}
+
+
+MyPromise.prototype.finally = function() {
+}
+
+
+
+
+let p = new MyPromise(function (resolve, reject) {
+  console.log('start')
+  setTimeout(function(){
+    resolve('data1')
+  },500)
+})
+p.then(
+  (v) => {
+  console.log('success： ' + v)
+  // return v // 1 返回 v
+  // return 100 // 2 返回常量
+  // return {a : 100} // 3 返回对象
+  // return undefined // 4 返回 undefined
+  // 5 不写return
+  },
+  (v) => {
+  console.log('error： ' + v)
+  }
+)
+.then(
+  (v) => {
+    console.log('success： ' + v)
+  },
+  (v) => {
+   console.log('error： ' + v)
+  }
+)
+console.log('end')
+
+

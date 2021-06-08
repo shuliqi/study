@@ -47,3 +47,20 @@ ajax('get', 'https://www.fastmock.site/mock/d867c364f89208a7672e9e9d0a822417/qix
 .catch((err) => {
   console.log(err)
 })
+
+
+
+
+
+const XMR = new XMLHttpRequest();
+XMR.onreadystatechange = function() {
+  if (XMR.readyState === 4) {
+    if (XMR.status === 200) {
+      console.log("请求成功", XMR.responseText)
+    } else {
+      console.log("请求失败")
+    }
+  }
+}
+XMR.open('get', 'https://www.fastmock.site/mock/d867c364f89208a7672e9e9d0a822417/qixiao/getFileDetail', true);
+XMR.send();
