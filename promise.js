@@ -187,33 +187,86 @@ MyPromise.prototype.then = function(onFulfilled, onRejected) {
 
 }
 
-MyPromise.prototype.catch = function(onCatch) {
-  let self = this;
-  return self.then(null, onCatch)
+MyPromise.prototype.catch = function(callback) {
+ return this.then(null, callback);
 }
 
+MyPromise.prototype.finally = function(callback) {
+  return this.then(() => {
+    MyPromise.resolve(callback());
+    return value
+  }, (reason) => {
+    MyPromise.resolve(callback());
+    throw reason;
+  })
+}
+
+
 MyPromise.resolve = function(value) {
+    // 如果是 promise，则直接原封不动的返回
+    if (value instanceof value) return value
     return new MyPromise((resolve, reject) => {
+      // 其他的要转一下；
       resolve(value);
     })
 }
 
 MyPromise.relect = function(reason) {
+  // 无论是什么都是rrejected 状态的promise
   return new MyPromise((resolve, reject) => {
     reject(reason);
+  })
+
+}
+
+MyPromise.all = function(promiseAll) {
+  if (!Array.isArray(promiseAll))  {
+    throw new Error("arguments 需要是数组")
+  }
+  const result  = [];
+  let i = 0;
+  return new MyPromise((resolve, reject) => {
+      
+    for(let i = 0;  i < promiseAll.length; i++) {
+      MyPromise.resolve(promiseAll[i]).then((data) =>{
+        i++;
+        result.push(data);
+
+        // 必须要等所有的都执行完，才能返回
+        if (i === promiseAll.length) {
+          resolve(result);
+        }
+      }, (err) => {
+        reject(err);
+      })
+    }
   })
 }
 
 
+MyPromise.race = function(promiseAll) {
+  if (promiseAll.length === 0) {
+    return ;
+  }
+  for (let i = 0; i < promiseAll.length; i++) {
+      MyPromise.resolve(promiseAll[i]).then((date) => {
+        resolve(data);
+        return; //  只要一个有状态了， 就返回回去
+      }, (err) => {
+        reject(err);
+      })
+  }
+}
 
-MyPromise.resolve('成功').then((value) => {
-  console.log(value)
-})
+
+// MyPromise.resolve('成功').then((value) => {
+//   console.log(value)
+// })
 
 
-MyPromise.relect('失败').then(() => {}, (err) => {
-  console.log(err)
-})
+// MyPromise.relect('失败').then(() => {}, (err) => {
+//   console.log(err)
+// })
 
 
 
