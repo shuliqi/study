@@ -1187,3 +1187,43 @@ p.then(
 console.log('end')
 
 
+
+
+console.log(1);
+
+let  b = new Promise((resolve, reject) =>{
+  console.log(2);
+}).then(() => {
+  console.log(3);
+})
+console.log("111");
+setTimeout(() => {
+  console.log(4);
+}, 100);
+setTimeout(() => {
+  console.log(5);
+}, 0);
+
+let c = async() => {
+  setTimeout(() => {
+    new Promise((resolve, reject) => {
+      console.log(6);
+    })
+  }, 0);
+  let x=  await new Promise((resolve, reject) =>{
+    console.log(5);
+    resolve(7)
+  })
+  console.log(x);
+  console.log(8);
+}
+
+console.log(9);
+
+c();
+
+1 2 9 5 7 8 4 6
+
+
+
+

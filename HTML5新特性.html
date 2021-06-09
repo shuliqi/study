@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,18 +8,25 @@
   <title>Document</title>
 </head>
 <body>
-  <!-- 选取颜色的 -->
-  <input type='color' value="#ff0878" id="color">
-
-  <!-- 选取日期 -->
-  <input type='date' id='date'>
-</body>
+<input type="text" id="input">
+<button onclick="onChange()">重置</button>
 <script type="text/javascript">
-  document.getElementById("date").onchange = function(e) {
-    console.log("date", e.target.value)
+  let obj = {
+    value: ""
   }
-  document.getElementById("color").onchange = function(e) {
-    console.log("color", e.target.value)
+  Object.defineProperty(obj, 'value', {
+    get: function() {
+    },
+    set: function(newValue) {
+      document.getElementById('input').value = newValue;
+    }
+  })
+  function onChange() {
+    obj.value = "11111";
   }
-</script>
+   document.getElementById('input').addEventListener('inpout', () => {
+      obj.value = value;
+   });
+  </script>
+</body>
 </html>
