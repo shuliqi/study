@@ -1,4 +1,85 @@
-import { measureMemory } from "node:vm";
+const { resolve } = require("node:path");
+
+const a = Promise.reject("test");
+const b = a.catch((data) => console.log(data));
+
+const a = Promise.reject("test")
+          .catch(data => console.log(data));
+const b  = a.catch((data) =>  console.log(data))
+
+console.log(1);
+setTimeout(() => {
+  console.log(2);
+  Promise.resolve()
+  .then((data) => {
+    console.log(3);
+  })
+  .then(data => {
+    console.log(4);
+  });
+  Promise.reject()
+  .catch((data) => {
+    console.log(5)
+  })
+});
+
+new Promise((resolve) => {
+  resolve();
+  console.log(6);
+})
+.then(() => {
+  console.log(7);
+  setTimeout(() => {
+    console.log(8);
+  })
+})
+.then(() => console.log(9));
+console.log(10);
+
+
+
+
+var nickName = "lilei";
+
+function Person(name) {
+    this.nickName = name;
+    this.sayHi = function () {
+      console.log(this.nickName);
+      setTimeout(function () {
+        console.log(this.nickName);
+      })
+    }
+}
+
+var Male = {
+  test: "test",
+  nickName: "xiaofnag",
+
+  sayHi: () => {
+    console.log(this.nickName);
+  }
+}
+
+var person = new (Person.bind(Male, "xiaoghong"));
+
+person.sayHi();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -8,25 +8,35 @@
 
 所有的html元素都可以看成是一个盒子模型， 一个盒子模型是由：content(内容)， padding（内边距），border（边框），margin（外边距）
 
+## 标准盒子模型：
+
 
 
 ![https://img4.mukewang.com/5b73f51e00015f7907740523.jpg](https://img4.mukewang.com/5b73f51e00015f7905000338.jpg)
+
+**从上图可以看到标准 W3C 盒子模型的范围包括 margin、border、padding、content，并且 content 部分不包含其他部分。**
+
+标准盒子模型：width就是content，不包含padding 和border： width = content.width。
+
+
+
+## IE盒子模型
 
 ![https://img1.mukewang.com/5b73f53f0001a7ec07610507.jpg](https://img.mukewang.com/5b73f53f0001a7ec05000334.jpg)
 
 
 
-
-
-标准盒子模型：width就是content，不包含padding 和border： width = content.width。
+**从上图可以看到 IE 盒子模型的范围也包括 margin、border、padding、content，和标准 W3C 盒子模型不同的是：IE 盒子模型的 content 部分包含了 border 和 pading。**
 
 IE盒子模型： width包含了content ， pading 和 border：width = content.width+ + padding + border；
 
+##  CSS如何设置这两种模型
+
 box-sizing:  定义如何计算一个元素的宽度和高度
 
-- border-box： 设置的宽度会包含padding 和 border，实际的内容的宽度： width - border - height； --> 即使加上 pading 和 border 也是一样的（加上 border + padding， 内容是减少的）
+- border-box： 设置的宽度会包含padding 和 border，实际的内容的宽度： width - border - height； --> 即使加上 pading 和 border 也是一样的（加上 border + padding， 内容是减少的）（IE盒子模型）
 
-- content-box：默认值；设置的元素的宽度高度仅仅是内容的宽度和高度。不包含 padding 和 border；(加上padding和border，content不会减少)，
+- content-box：默认值；设置的元素的宽度高度仅仅是内容的宽度和高度。不包含 padding 和 border；(加上padding和border，content不会减少)，（标准模型）
 
   
 
