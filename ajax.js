@@ -293,3 +293,11 @@ new Promise(resolve => {
     console.log('promise2')
   })
 console.log('script end')
+
+
+
+
+
+
+
+

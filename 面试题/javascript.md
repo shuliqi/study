@@ -2571,6 +2571,17 @@ sleep(1000)
 
 [Promise](https://shuliqi.github.io/2018/03/20/ES6%E5%AD%A6%E4%B9%A0-Promise/)
 
+```javascript
+const a = Promise.reject("test");
+const b = a.catch((data) => console.log(data));
+
+const a = Promise.reject("test")
+          .catch(data => console.log(data));
+const b  = a.catch((data) =>  console.log(data))
+```
+
+
+
 ### 40. 事件循环
 
 [自己写的博客](https://shuliqi.github.io/2019/08/10/JavaScript%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/)
@@ -2590,6 +2601,39 @@ js 的任务大致分为同步宏任务，异步微任务， 异步宏任务，
 > 由于因为async await 本身就是promise+generator的语法糖。所以await后面的代码是microtask。[从async/await面试题看宏观任务和微观任务](https://cloud.tencent.com/developer/article/1745948)
 
 测试：
+
+```javascript
+console.log(1);
+setTimeout(() => {
+  console.log(2);
+  Promise.resolve()
+  .then((data) => {
+    console.log(3);
+  })
+  .then(data => {
+    console.log(4);
+  });
+  Promise.reject()
+  .catch((data) => {
+    console.log(5)
+  })
+});
+
+new Promise((resolve) => {
+  resolve();
+  console.log(6);
+})
+.then(() => {
+  console.log(7);
+  setTimeout(() => {
+    console.log(8);
+  })
+})
+.then(() => console.log(9));
+console.log(10);
+```
+
+
 
 ```javascript
 async function async1() {
