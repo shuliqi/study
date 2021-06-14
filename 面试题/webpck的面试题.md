@@ -1,3 +1,17 @@
+
+
+![image-20210613231947561](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210613231947561.png)
+
+
+
+![image-20210614002051397](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210614002051397.png)
+
+
+
+
+
+https://juejin.cn/post/6859938891937447949#heading-26
+
 ### 1. webpack于grunt，gulp 有什么区别
 
 相同点：都是前端构建的工具
@@ -22,6 +36,7 @@
 ### 3. .有哪些常见的Loader？他们是解决什么问题的？
 
 * image-webpack-loader： 对图片进行压缩
+* url-loader： 设置limit限制， 使用dataurl 来表达
 * source-map-loader： 在soure-map 添加文件的，便于断点调试
 * babel-loader: 将ES6 转 成ES5 语法 的
 * eslint-loader: 通过ESlint检查j s代码
@@ -44,7 +59,12 @@ module.exports = {
 }
 ```
 
-### 4. .有哪些常见的Plugin？他们是解决什么问题的
+### 4. 有哪些常见的Plugin？他们是解决什么问题的
+
+- html-webpack-plugin: 自动生成htnl并引入我们的bundle
+- clean-webpack-plugin: 每次build 之前对 打包目录清空一次
+- mini-css-extract-plugin： 将css 从 js 中分离出来
+- hotModuleReplacementplugn： 实现模块热替换的
 
 * DefinePlugin： 在编译的时候配置一个全局变量的
 
@@ -59,18 +79,6 @@ module.exports = {
   }
   ```
 
-* CommonChunkPlugin:  提取公共代码的
-
-  ```javascript
-  {
-    plugins: [
-      new webpack.optimize.CommonsChunkPlugin({
-      	filename: string, // 提取出来的公共的代码的文件的名字
-      })
-  
-    ]
-  }
-  ```
 
 ### 5. Loader和Plugin的不同？
 
