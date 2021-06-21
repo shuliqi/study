@@ -333,6 +333,8 @@ for (var n of fibonacci) {
 
 - 使用**Object.prototype.toString.call([1,2])**，如果返回”[object Array]“, 说明是数组。
 
+  https://www.jianshu.com/p/60aaf95a4f78
+
 - 使用**constructor**如果 arr.cunstructor = Array，说明是数组。constructor 属性返回构造该对象的数组函数的引用 注意：不是很准确， 因为有时候我们可以设置一个对象的 constructor 属性
 
   ```javascript
@@ -401,7 +403,7 @@ for (var n of fibonacci) {
 
 == 如果两者的类型不同，则需要类型转换。转换的规则如下:
 
-![image-20210528010335178](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210528010335178.png)
+![image-20210614205832149](/Users/shuliqi/Library/Application Support/typora-user-images/image-20210614205832149.png)
 
 ```javascript
 {
@@ -1301,16 +1303,12 @@ person.getName();
 
 ### 18.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？
 
-<<<<<<< HEAD
-##### 测试
-=======
+
 [JavaScript中的闭包](https://shuliqi.github.io/2018/10/23/JavaScript%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/)
 
 概念：当函数可以记住并且可以访问它所在的词法作用域，就产生了闭包，即使这个函数不在当前的作用域执行。
 
 ##### 测试掌握了没
->>>>>>> a06f4084381cd06e91cbe67c21e0c99168dfec04
-
 ```javascript
 var name = "The Window";
 var object = {
@@ -1364,7 +1362,7 @@ console.log(object.getNameFunc()());
 
 ### 19 谈谈原型链的理解
 
-[JavaScript中的原型链](http://localhost:4000/2018/06/01/JavaScript%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE/#%E8%B0%83%E5%AF%B9%E8%B1%A1%E5%92%8C%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1)
+[JavaScript中的原型链](https://shuliqi.github.io/2018/06/01/JavaScript%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE/)
 
 ### 19.call、apply 有什么区别？call,aplly 和 bind 的内部是如何实现的？
 

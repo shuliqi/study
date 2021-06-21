@@ -1227,3 +1227,43 @@ c();
 
 
 
+
+
+class People {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  getName() {
+    return this.name;
+  }
+  getAge() {
+    return this.age;
+  }
+  zhang = "hahah";
+}
+
+const people = new People("shuliqi", 12);
+console.log(people.zhang)
+
+
+Function.prototype.myBind = function(contenxt, ...arg) {
+  const self = this;
+
+  const bound = function () {
+    // 如何是new 使用，那么this 指  就是值当前的对象
+    // 普调调用的话， 那么this 就是我们需要改变的context
+    self.apply(this instanceof self ? this : contenxt, [...arg, ...arguments]);
+  }
+  // this 指当前的构造函数
+  bound.prototype = this.prototype;
+  return bound
+}
+
+
+function debounce(fn, wait, immadiate =  false) {
+  let con
+  return function (params) {
+    
+  }
+}
