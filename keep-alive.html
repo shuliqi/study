@@ -1,0 +1,64 @@
+<html>
+  <header></header>
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+  <body>
+    <div id="app">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="用户管理" name="first"></el-tab-pane>
+        <el-tab-pane label="配置管理" name="second"></el-tab-pane>
+        <el-tab-pane label="角色管理" name="third"></el-tab-pane>
+        <el-tab-pane label="定时任务补偿" name="fourth"></el-tab-pane>
+      </el-tabs>
+      <keep-alive>
+        <user v-if="activeName === 'first'"></user>
+      </keep-alive>
+      <setting v-if="activeName === 'second'"></setting>
+    </div>
+  </body>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    Vue.component('user', {
+      data: () => {
+        return {
+          active: "1"
+        }
+      },
+      methods: {
+        click: (value) => {
+          this.active = value.$options.propsData.name;
+        }
+      },
+      activated: () => {
+        console.log("激活")
+      },
+      deactivated: () => {
+        console.log("缓存组件停用")
+      },
+      template: `<el-tabs v-model="active" tab-position="left" @tab-click="click">
+        <el-tab-pane label="11" name="1">11</el-tab-pane>
+        <el-tab-pane label="22" name="2">33</el-tab-pane>
+        <el-tab-pane label="3" name="3">44</el-tab-pane>
+      </el-tabs>`
+    })
+    Vue.component('setting', {
+      template: "<div>设置</div>"
+    })
+    new Vue({
+      el: "#app",
+      data: {
+        name: "舒丽琦",
+        activeName: "first"
+      },
+      methods: {
+        handleClick: (value) => {
+          this.activeName = value.$options.propsData.name;
+        }
+      },
+    })
+  </script>
+</html>
