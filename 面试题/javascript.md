@@ -139,6 +139,24 @@ console.log(myInstanceof(a, Array)); // true
 
 ```
 
+```javascript
+console.log(123 instanceof Number); // false. 因为 123 不是对象
+console.log(new Number(123) instanceof Number); // true 
+// new 大家都知道，根据构造函数生成新实例，这个时候生成的是**对象**，而不是基本类型
+
+console.log(Number(123) instanceof Number); // false, 
+// Number(123) 生成的是基本数据类型
+
+
+console.log(typeof 123); // number
+console.log(typeof new Number(123)); // object
+// new 大家都知道，根据构造函数生成新实例，这个时候生成的是**对象**，而不是基本类型
+
+console.log(typeof Number(123)); // number
+```
+
+
+
 ### 7. for of , for in 和 forEach,map 的区别。
 
 - **for ... of**: 只要具有 interator 接口， 就可以使用 for...of 遍历他的属性值。
