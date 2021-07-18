@@ -48,7 +48,7 @@ box-sizing:  定义如何计算一个元素的宽度和高度
 
 **伪类选择器**
 
-1. first-child: 父元素的第一个子元素
+1. first-child: 表示在一组兄弟元素中的第一个元素。
 
    ```css
     .parent :first-child {
@@ -56,9 +56,9 @@ box-sizing:  定义如何计算一个元素的宽度和高度
      }
    ```
 
-2. last-child：父元素的最后一个子元素
+2. last-child：表示在一组兄弟元素中的最后一个子元素
 
-3. nth-child(n)： 父元素的第n个子元素
+3. nth-child(n)：表示在一组兄弟元素的第n个子元素
 
    ```css
      .parent :nth-child(2) {
@@ -66,7 +66,7 @@ box-sizing:  定义如何计算一个元素的宽度和高度
      }
    ```
 
-4. nth-last-child(n): 父元素倒数的第n个元素
+4. nth-last-child(n): 表示在一组兄弟元素倒数的第n个元素
 
    ```css
    .parent :nth-last-child(2) {
@@ -323,8 +323,8 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 ##### BFC的规则
 
 * 内部的box 垂直排列， 一个接着一个的放
-* 垂直方向的距离由margin 决定,同一个bfc的box margi内会重叠，即使存在浮动元素也是如此
-* 盒子的margin-left 会与其父级的盒子的border-left相接触，
+* 垂直方向的距离由margin 决定,同一个bfc的box margi内会重叠;
+* 每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
 * BFC区域的元素不会与浮动的元素重叠在一起
 * b f c 计算高度的时候， 浮动元素的高度也需要计算进去
 * Bfs 是一个独立的渲染空间，不会影响到外部
@@ -875,6 +875,94 @@ display: inline-block;
   	margin:auto;
   }
   ```
+
+例子：
+
+```html
+<!-- 左边固定， 右边自适应 -->
+<!-- <!DOCTYPE html>
+<html lang="">
+  <head>
+    <style>
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+      .left {
+        flex: 0 0  200px;
+        height: 200px;
+        background: beige;
+      }
+      .right {
+        width: calc(100% - 200px);
+        height: 300px;
+        background:blue;
+      }
+    </style>
+  </head>
+      <div class="left"></div>
+      <div class="right"></div>
+  </body>
+</html> -->
+
+
+<!-- 水平垂直居中 -->
+<!-- <!DOCTYPE html>
+<html lang="">
+  <head>
+    <style>
+      .container {
+        width: 600px;
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: goldenrod;
+      }
+      .item {
+        background: hotpink;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">垂直居中</div>
+    </div>
+  </body>
+</html> -->
+
+
+<!-- 水平垂直居中：未知宽高-->
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <style>
+      .container {
+        width: 600px;
+        height: 600px;
+        display: flex;
+        position: relative;
+        background: goldenrod;
+      }
+      .item {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: hotpink;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">垂直居中</div>
+    </div>
+  </body>
+</html>
+
+
+```
 
 
 
