@@ -51,11 +51,69 @@ console.log(a==b, a===b)
 
 很明显，如果 a，b 是存储在栈内存中的话，两者应该是明显相等的，就像 null === null 是 true 一样，但结果两者并不相等，说明两者都是存储在堆内存中的，指针指向不一致。
 
+出过的面试题：
+
+```javascript
+
+console.log(typeof new String('123')) // Object
+console.log(typeof String('123')) // String
+console.log(typeof '123') // String
+console.log(new String('123') instanceof String) // true
+console.log(String('123') instanceof String) // false
+console.log('123' instanceof String) // false
+
+
+console.log( typeof 123 );  // Number
+console.log( typeof Number(123)) // Number
+console.log( typeof new Number(123) ) // Object
+
+console.log( 123 instanceof Number); // false
+console.log( Number(123) instanceof Number) // false
+console.log( new Number(123) instanceof Number) // true
+
+
+```
+
+
+
 ### 5.null 是对象吗？
 
 null 其实不是一个对象，尽管`typeof null` 输出的是`object`,但是这其实是一个 bug。在 js 最初的版本中使用的是 32 位系统，为了性能考虑地位存储变量的类型信息，`000`开头表示为对象类型，然而`null`为全 0，故而`null`被判断为对象类型。编程语言最后的形式都是二进制，所以 JavaScript 中的对象在底层肯定也是以二进制表示的。如果底层有前三位都是零的二进制，就会被判定为对象。底层中 null 的二进制表示都是零。所以在对 null 的类型判定时，发现其二进制前三位都是零，因此判定为 object。
 
 ### 6. typeof 是否正确判断类型? instanceof 呢？ instanceof 的实现原理是什么？
+
+先测试一下：
+
+```javascript
+
+console.log(typeof undefined);
+console.log(typeof 'string');
+console.log(typeof 123)
+console.log(typeof false);
+console.log(typeof Symbol("我是独一无二的值"))
+console.log(typeof null)
+
+console.log(typeof function() {});
+console.log(typeof {});
+console.log(typeof new Date())
+console.log(typeof [1,2,3]);
+
+
+
+
+// undefined
+// string
+// number
+// boolean
+// symbol
+// object
+// function
+// object
+// object
+// object
+```
+
+
 
 - typeof 是一个一元运算，放在一个运算数之前，运算数可以是任意类型。**它返回值是一个字符串，该字符串说明运算数的类型。**
 
@@ -81,6 +139,34 @@ typeof function() {}; // "function"
   语法：`object instanceof constructor` 看这个 object(对象)是否有构造函数的 prototype 属性
 
   参数：`object（`要检测的对象.）`constructor（`某个构造函数）
+
+先测试一下：
+
+```javascript
+
+// instanceof： 判断当前的对象在它的原型链上是否存在 这个构造函数的prototype
+
+console.log(undefined instanceof undefined); // 报错
+console.log('string' instanceof String);
+console.log(123 instanceof Number)
+console.log(false instanceof Boolean);
+console.log(Symbol("我是独一无二的值") instanceof Symbol)
+console.log(null instanceof Object)
+// false
+// false
+// false
+// false
+console.log(function() {} instanceof Object);
+console.log({} instanceof Object);
+console.log(new Date() instanceof Object)
+console.log([1,2,3] instanceof Object);
+// true
+// true
+// true
+// true
+```
+
+
 
 ```javascript
 // instanceof 是用来检车一个对象在它的原型链上是有一个构造函数的prototype属性
@@ -153,13 +239,52 @@ console.log(typeof new Number(123)); // object
 // new 大家都知道，根据构造函数生成新实例，这个时候生成的是**对象**，而不是基本类型
 
 console.log(typeof Number(123)); // number
+
 ```
+
+测试写的函数：
+
+````javascript
+console.log(function() {} instanceof Object);
+console.log({} instanceof Object);
+console.log(new Date() instanceof Object)
+console.log([1,2,3] instanceof Object);
+// true
+// true
+// true
+// true
+
+
+function MyInstanceof(A, B) {
+  const B_Prototype = B.prototype;
+  A = A.__proto__;
+  while(true) {
+    if (A === B_Prototype) {
+      return true;
+    } else if (A === 'null') {
+      return false;
+    }
+    A = A.__proto__;
+  }
+}
+
+console.log(MyInstanceof(function(){}, Object));
+console.log(MyInstanceof({}, Object));
+console.log(MyInstanceof(new Date(), Object))
+console.log(MyInstanceof([1,2,3], Object));
+
+// true
+// true
+// true
+// true
+
+````
 
 
 
 ### 7. for of , for in 和 forEach,map 的区别。
 
-- **for ... of**: 只要具有 interator 接口， 就可以使用 for...of 遍历他的属性值。
+- **for ... of**: 只要具有 interator 接口， 就可以使用 for...of 遍历他的属性值。(取的是健值)
 
   - 数组的遍历器接口只返回具有数字索引的属性(数组原生具备 iterator 接口, 默认部署了 Symbol.iterator 属性)
 
@@ -351,7 +476,26 @@ for (var n of fibonacci) {
 
 - 使用**Object.prototype.toString.call([1,2])**，如果返回”[object Array]“, 说明是数组。
 
+  
+
+  默认情况下，`toString()` 方法被每个 `Object` 对象继承。如果此方法在自定义对象中未被覆盖，`toString()` 返回 "[object *type*]"，其中 `type` 是对象的类型
+
+  各数据类型使用`toString()`后的结果表现不一的原因在于：**所有类在继承`Object`的时候，改写了`toString()`方法**。原始`Object`上的`toString()`方法是可以输出数据类型的
+
   https://www.jianshu.com/p/60aaf95a4f78
+
+  ```javascript
+  
+  const a = [1,2];
+  console.log(Object.prototype.toString.call(a) === "[object Array]"); 
+  console.log(Array.isArray(a));
+  console.log(a instanceof  Array);
+  // true
+  // true
+  // true
+  ```
+
+  
 
 - 使用**constructor**如果 arr.cunstructor = Array，说明是数组。constructor 属性返回构造该对象的数组函数的引用 注意：不是很准确， 因为有时候我们可以设置一个对象的 constructor 属性
 
@@ -373,7 +517,7 @@ for (var n of fibonacci) {
 - 类数组具有 length 属性,其他属性(索引)是非负整数
 - 不具备数据所有的方法
 
-类数组：函数的参数(arguments), Dom 对象列表，document.getquerySelectAll(),(getelementByTagName, document.querySelectorAll 等)的都是类数组
+类数组：函数的参数(**arguments**), Dom 对象列表  **getelementByTagName, document.querySelectorAll ** 的都是类数组
 
 **类数组转数组的方法**
 
@@ -393,6 +537,8 @@ for (var n of fibonacci) {
       return result; 
   }
   ```
+
+  slice（begin， end）从 `begin` 到 `end` 的所有元素（包含 `begin`，但不包含 `end`）, begin end 都是可选的，begin 没有设置时 是从 0 开始 
 
 - Array.from(likeArr)。Array.from 可以将类似数据的对象和具有 inerator 接口的对象转换转换成真正的数数组。
 
@@ -956,7 +1102,7 @@ https://shuliqi.github.io/2018/04/10/ES6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Cla
   }
   ```
 
-* **filter()：**返回数组的一个子集。
+* **filter()：**返回数组的一个子集。（原数组不会改变）
 
   ```javascript
   {
@@ -1103,6 +1249,12 @@ function getName() {
 var name = "shuliqi";
 getName();
 
+
+
+
+
+
+
 //shuliqi
 ```
 
@@ -1112,6 +1264,13 @@ function getName() {
 }
 var name = "shuliqi";
 window.getName();
+
+
+
+
+
+
+
 
 // shuliqi
 ```
@@ -1126,6 +1285,13 @@ var person = {
 };
 var name = "shuliqi11111";
 person.getName();
+
+
+
+
+
+
+
 
 // shuliqi2222
 ```
@@ -1320,7 +1486,6 @@ person.getName();
 注：如果查找的目的是对变量进行赋值，那么就会使用 LHS 查询；如果目的是获取变量的值，就会使用 RHS 查询
 
 ### 18.什么是闭包？闭包的作用是什么？闭包有哪些使用场景？
-
 
 [JavaScript中的闭包](https://shuliqi.github.io/2018/10/23/JavaScript%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/)
 
@@ -1732,6 +1897,7 @@ People.prototype.age = 18;
 People.prototype.getAge = function() {
   console.log("父类原型方法", this.age);
 };
+
 
 /**
  * 原型链继承： 子类的原型指向父类的实例
