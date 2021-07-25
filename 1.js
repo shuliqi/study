@@ -2129,4 +2129,13 @@ console.log(deepKey(obj))
 
 
 
+//  n 数之和 等于target
 
+
+function sum(arr, n, target) {
+  // 首先进行排序
+  arr.sort((cur, pre) => cur - pre);
+  
+}
+
+console.log(sum([1,2,3,6], 2, 3));
