@@ -3826,3 +3826,101 @@ var salary = "1";
 })();
 // undefined 2
 ```
+
+
+
+
+
+判断对象是都相等
+
+```javascript
+const  deepEqual = (obj1,obj2) => {
+  if (obj1 === obj2) {
+    return true;
+  } else if (typeof obj1 === "object" && obj1 !== null && typeof  obj2 ==="object" && obj2 !== null) {
+    if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+      return false
+    } else {
+      for (const key in obj1) {
+          if (obj2.hasOwnProperty(key)) {
+            if (!deepEqual(obj1[key], obj2[key])) {
+              return false;
+            }
+          } else {
+            return false;
+          }
+      }
+      return true;
+    }
+  }  else {
+    return false;
+  }
+}
+
+const obj1 = {
+  nme: "shuliqi",
+  person: {
+    age: 10,
+    sex: "nv",
+    children: {
+      name: "shuliqi",
+      age: 1,
+      shuliq:"asdk"
+    }
+  }
+}
+
+const obj2 = {
+  nme: "shuliqi",
+  person: {
+    age: 10,
+    sex: "nv",
+    children: {
+      name: "shuliqi",
+      age: 1,
+    }
+  }
+}
+console.log(deepEqual(obj1,obj2));
+```
+
+
+
+
+
+替换所有的字符串
+
+```javascript
+const str = "我的名字是 {{name}}, 年龄是 {{age}} 岁, 我妈妈的年龄是 {{mather}}";
+
+const reg = /^[\w]+}}/g
+const obj = {
+  name: "shuliqi",
+  age: 12
+}
+
+const arr = str.split("{{");
+const result = arr.map((s) => {
+  const key = s.split("}}")[0];
+  return s.replace(reg, obj[key])
+}).join("");
+console.log(result);
+```
+
+```javascript
+
+let str = "我的名字是 {{name}}, 年龄是 {{age}} 岁, 我妈妈的年龄是 {{mather}}";
+const reg = /{{[\w]+}}/g
+const obj = {
+  name: "shuliqi",
+  age: 12
+}
+const keyArr = str.match(reg);
+for( let i = 0; i < keyArr.length; i++) {
+  str = str.replace(keyArr[i], obj[keyArr[i].match(/[\w]/gi).join("")])
+}
+console.log(str);
+```
+
+
+
