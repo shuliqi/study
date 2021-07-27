@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width-device-width initial-scale=1 maximum-scale=1 minimum-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>Document</title>
+</head>
+<style>
+</style>
+<body>
+<div>
+  <input type="text" class="input1">
+  <input type="text" class="input2">
+  <div class="btn">相加</div>
+  <div class="result"></div>
+</div>
+</body>
+<script>
+    const btnDom = document.querySelector(".btn");
+    const input1Dom = document.querySelector(".input1");
+    const input2Dom = document.querySelector(".input2");
+    const resultDom = document.querySelector(".result");
+    btnDom.addEventListener("click", () => {
+      const value1 = input1Dom.value;
+      const value2 = input2Dom.value;
+      if (!(/^[\d]+$/.test(value1))) {
+        resultDom.innerHTML = "输入的值不用合法， 请输入数字";
+        return;
+      };
+      if (!(/^[\d]+$/.test(value2))) {
+        resultDom.innerHTML = "输入的值不用合法， 请输入数字";
+        return;
+      };
+      if (value1 < Math.pow(-2, 31) || value2 < Math.pow(-2, 31) ) {
+        resultDom.innerHTML = "输入的值不用合法， 请输入数字";
+        return;
+      };
+      if ((value1 > Math.pow(2, 31) -1) || (value2 > Math.pow(2, 31) -1)) {
+        resultDom.innerHTML = "输入的值不用合法， 请输入数字";
+        return;
+      }
+      let temp = 0;
+      let result = '';
+      let i = value1.length - 1;
+      let j = value2.length - 1;
+      while ( i >= 0 || j >= 0) {
+        const num1 = value1[i] ? value1[i] : 0;
+        const num2 = value2[j] ? value2[j] : 0;
+        sum = parseInt(num1) + parseInt(num2) + temp;
+        temp = sum > 10 ? 1 : 0;
+        result = (sum % 10) + result 
+        j--;
+        i--;
+      }
+      resultDom.innerHTML = result;
+    })
+
+</script>
+</html>

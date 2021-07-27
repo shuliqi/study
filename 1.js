@@ -1267,3 +1267,875 @@ function debounce(fn, wait, immadiate =  false) {
     
   }
 }
+
+
+var a = new String('123')
+var b = String('123')
+var c = '123'
+
+console.log(typeof new String('123')) // Object
+console.log(typeof String('123')) // String
+console.log(typeof '123') // String
+console.log(new String('123') instanceof String) // true
+console.log(String('123') instanceof String) // false
+console.log('123' instanceof String) // false
+
+
+console.log( typeof 123 );  // Number
+console.log( typeof Number(123)) // Number
+console.log( typeof new Number(123) ) // Object
+
+console.log( 123 instanceof Number); // false
+console.log( Number(123) instanceof Number) // false
+console.log( new Number(123) instanceof Number) // true
+
+
+
+console.log(typeof undefined);
+console.log(typeof 'string');
+console.log(typeof 123)
+console.log(typeof false);
+console.log(typeof Symbol("我是独一无二的值"))
+console.log(typeof null)
+
+console.log(typeof function() {});
+console.log(typeof {});
+console.log(typeof new Date())
+console.log(typeof [1,2,3]);
+
+// undefined
+// string
+// number
+// boolean
+// symbol
+// object
+// function
+// object
+// object
+// object
+
+
+// instanceof： 判断当前的对象在它的原型链上是否存在 这个构造函数的prototype
+
+console.log(undefined instanceof undefined); // 报错
+console.log('string' instanceof String);
+console.log(123 instanceof Number)
+console.log(false instanceof Boolean);
+console.log(Symbol("我是独一无二的值") instanceof Symbol)
+console.log(null instanceof Object)
+// false
+// false
+// false
+// false
+console.log(function() {} instanceof Object);
+console.log({} instanceof Object);
+console.log(new Date() instanceof Object)
+console.log([1,2,3] instanceof Object);
+// true
+// true
+// true
+// true
+
+
+function MyInstanceof(A, B) {
+  const B_Prototype = B.prototype;
+  A = A.__proto__;
+  while(true) {
+    if (A === B_Prototype) {
+      return true;
+    } else if (A === 'null') {
+      return false;
+    }
+    A = A.__proto__;
+  }
+}
+
+console.log(MyInstanceof(function(){}, Object));
+console.log(MyInstanceof({}, Object));
+console.log(MyInstanceof(new Date(), Object))
+console.log(MyInstanceof([1,2,3], Object));
+
+// true
+// true
+// true
+// true
+
+
+const obj = {
+  name: "shu",
+  age: 12
+}
+for( const key in obj) {
+  console.log(key)
+}
+
+
+const arr = ["shuliqi", 23, "age"];
+for(const value  of arr) {
+  console.log(value)
+}
+for(const key  in arr) {
+  console.log(key)
+}
+
+
+const a = [1,2];
+console.log(Object.prototype.toString.call(a) === "[object Array]"); 
+console.log(Array.isArray(a));
+console.log(a instanceof  Array);
+// true
+// true
+// true
+
+
+function name() {
+  // const arg = Array.from(arguments)
+  // const arg = [...arguments]
+  const arg = Array.prototype.slice.call(arguments);
+  console.log(arg);
+}
+
+name(1,2,3,4)
+
+console.log([] == true);
+console.log(String([]))""0 
+
+
+console.log([1, 2, 3] == "1,2,3");
+String([1,2,3]) "1,2,3"
+
+
+
+{
+  class People {
+    constructor() {
+      this.age = 38;
+    }
+  }
+  class MyPeople extends People {
+    constructor() {
+      super();
+    }
+    static get() {
+      this.age = 10;
+      super.age = 20;
+      console.log(super.age);
+      console.log(this.age);
+    }
+  }
+  MyPeople.get();
+  MyPeople.age;
+
+  // undefined 20
+  // super 作为对象使用， 如果是赋值操作， 在静态方法中， 就表示给当前的类的字段赋值， 如果在普调的方法， 就是给当前的实例赋值
+  // super 作为对象使用，
+}
+
+class People {
+  constructor() {
+    this.age = 38;
+  }
+}
+People.age = 30;
+
+class MyPeople extends People {
+  constructor() {
+    super();
+    this.age = 10;
+    super.age = 20;
+    console.log(super.age);
+    console.log(this.age);
+  }
+}
+const people = new MyPeople();
+
+
+
+class A {
+  constructor() {
+    this.p = 2;
+  }
+}
+
+class B extends A {
+  get m() {
+    return super.p;
+  }
+}
+
+let b = new B();
+console.log(b.m);
+
+
+class People {
+  constructor(name) {
+    this.name = name;
+  }
+  get() {
+    console.log(this.name,  this.age)
+  }
+}
+
+class MyPeople extends People {
+  constructor() {
+     // super(...arguments)
+  }
+  getName() {
+    console.log(super.name)
+  }
+}
+const people = new MyPeople('shuliqi');
+// ReferenceError:: Must call super constructor in derived class before accessing 'this' or returning from derived constructor
+
+
+class A {
+  constructor() {
+    this.p = 2;
+  }
+}
+
+class B extends A {
+  get m() {
+    return super.p;
+  }
+}
+
+let b = new B();
+console.log(b.m);
+
+let name = "as";
+let  name = "11";
+console.log(name)
+
+
+let  name
+
+function name() {
+  const name = "asda";
+  function getName() {
+    console.log(name);
+  }
+  bar(getName)
+}
+function bar(fn) {
+  console.log("1111");
+  fn();
+}
+
+
+function foo() {
+  var a = 1;
+  function getValue () {
+    console.log(a);
+  }
+  bar(getValue);
+}
+function bar(fn) {
+ fn(); // 1
+}
+foo()
+
+
+
+function message(message) {
+  setTimeout(function timer() {
+    console.log(message)
+  }, 1000)
+}
+message("shuliqi")
+
+for (var i=1; i<=5; i++){
+  (function (j) {
+    setTimeout(function(){
+      console.log(j);
+    },i*1000);
+  })(i)
+}
+
+for (let i=1; i<=5; i++){
+    setTimeout(function(){
+      console.log(i);
+    },i*1000);
+}
+
+
+function person() {
+  
+}
+
+
+function num() {
+  var num = 0;
+  return function() {
+    num++;
+    console.log(num);
+  };
+}
+var fn = num();
+fn();
+fn();
+fn();
+fn();
+fn();
+fn();
+fn = null;
+fn = num();
+fn();
+fn();
+fn();
+
+
+function MyPeople() {};
+const person1 = new MyPeople();
+console.log(person1.__proto__ === MyPeople.prototype);
+console.log(MyPeople.__proto__ === Function.prototype);
+console.log(MyPeople.prototype.__proto__ === Object.prototype);
+console.log(Object.__proto__ === Function.prototype)
+console.log(Function.prototype.__proto__ ===  Object.prototype)
+console.log(Object.prototype.__proto__ === null)
+
+
+// true
+// true
+// true
+// true
+// true
+// true
+
+function getName(age, sex) {
+  console.log(this.name, age, sex)
+}
+const obj = {
+  name: "shuliqi"
+}
+
+Function.prototype.myCall = function(context, ...args) {
+  if (typeof this !== 'function') {
+    console.log("调用的对象不是一个函数");
+    return false;
+  }
+  const fnName = Symbol();
+  context[fnName] = this;
+  context[fnName](...args);
+  delete  context[Symbol()]
+}
+getName.myCall(obj, "23", "女")
+
+
+
+function getName(params) {
+  console.log(this.name, params[0], params[1])
+}
+const obj = {
+  name: "shuliqi"
+}
+Function.prototype.myApply = function(context, ...args) {
+  if (typeof this !== 'function') {
+    console.log("调用的对象不是一个函数");
+    return false;
+  }
+  const fnName = Symbol();
+  context[fnName] = this;
+  context[fnName](args);
+  delete  context[fnName];
+}
+
+getName.myApply(obj, "23", "女")
+
+
+---------------------
+---------------------
+
+---------------------
+
+---------------------
+
+
+function getName(params) {
+  this.age = 12;
+  console.log(this.name, params[0], params[1])
+}
+const obj = {
+  name: "shuliqi"
+}
+Function.prototype.myBind = function(context, ...args) {
+  if (typeof this !== 'function') {
+    console.log("调用的对象不是一个函数");
+    return false;
+  }
+  const self = this;
+  function bound () {
+    self.call(this instanceof self ? this : context, [...args, ...arguments]);
+  }
+  bound.prototype = self.prototype;
+  return bound;
+}
+
+const test = getName.myBind(obj, "2113", "女");
+const my = new test("asda");
+console.log(my);
+
+// sum(1)(2)(3) 返回结果是 1,2,3 之和
+function sum(x) {
+  return function(y) {
+    return function(z) {
+      return x + y + z
+    }
+  }
+}
+
+console.log(sum(1)(2)(3))
+
+
+function curry(fn, arg = []) {
+  return function() {
+    const rest = [...arguments, ...arg];
+    if (rest.length < fn.length) {
+      return curry(fn, rest);
+    } else {
+      return fn.apply(null, rest);
+    }
+  }
+}
+
+const add =  function(a, b, c) {
+    return a + b + c;
+}
+const curryAdd = curry(add);
+console.log(curryAdd(1)(2)(3))
+
+
+
+function debounce(fn, wait, immediate = true) {
+  let context;
+  let args
+  let timer;
+  let later = () => {
+    timer =  setTimeout(() => {
+      if (!immediate) {
+        fn.apply(context, args);
+        timer = context = args = null;
+      }
+    }, wait)
+  }
+
+  return function () {
+    if (timer) {
+      // 不是首次进入
+      clearTimeout(timer);
+      later();
+    } else {
+      if (immediate) {
+        // 如果是立即执行的
+        fn.apply(this, [...arguments]);
+      } else {
+        context = this;
+        args = arguments;
+        later();
+      }
+    }
+  }
+}
+function handle() {
+  console.log("111");
+}
+window.addEventListener('resize', debounce(handle, 1000, false))
+
+
+
+
+function throttle(fn, wait) {
+  let previous = 0;
+  let context = null;
+  let args;
+  return function() {
+    const now = new Date().getTime();
+    if (!previous) {
+      // 首次进入
+      previous = now;
+    } else {
+      context = this;
+      args =  arguments;
+      if (wait - (now - previous) <= 0 ) {
+        fn.apply(context, args);
+        previous = now;
+        context = args = null;
+      }
+    }
+  }
+}
+function handle() {
+  console.log("111");
+}
+window.addEventListener('resize', throttle(handle, 1000));
+
+
+
+// 求数组所有子集 [1,2,3]-->[1] 、[2]、[1,2]、[3]、[1,2,3]、[1,3]、[2,3]
+
+
+
+// function 
+
+
+
+// // 传入一个promise生成器
+// Promise.retry = async (promiseFunc, maxTimes = 3) => {
+//   let result;
+//   while (maxTimes > 0) {
+//     --maxTimes;
+//     // 新建一个promise接管目标promise的resolve以及reject
+//     await new Promise((res, rej) => {
+//       promiseFunc()
+//         .then((result1) => {
+//           // 成功即可终端循环
+//           maxTimes = 0;
+//           result = result1;
+//           res();
+//         })
+//         .catch((e) => {
+//           // 失败检测是否还有重试次数
+//           if (maxTimes === 0) {
+//             rej(e);
+//           } else {
+//             res();
+//           }
+//         });
+//     });
+//   }
+//   return result;
+// };
+
+// Promise.retry = function (promiseFn, times = 3) {
+//   return new Promise(async (resolve, reject) => {
+//     while (times--) {
+//       try {
+//         var ret = await promiseFn();
+//         resolve(ret);
+//         break;
+//       } catch (error) {
+//         if (!times) reject(error);
+//       }
+//     }
+//   });
+// };
+// function getProm() {
+//     const n = Math.random();
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() =>  n > 0.9 ? resolve(n) : reject(n), 1000);
+//     });
+// }
+// Promise.retry(getProm);
+
+
+
+
+Promise.retry = (promiseFn, time) => {
+  return new Promise(async(resolve, reject) => {
+    while(time--) {
+      console.log("333", time)
+      try {
+        console.log("444", `还剩${time}次重试`)
+        const result = await promiseFn();
+        resolve(result);
+        break;
+      } catch (error) {
+        if (!time) {
+          console.log("5555")
+          reject(error)
+        }
+      }
+    }
+  })
+}
+
+const  getData = () => {
+  const n  = Math.random();
+  return new Promise((resolve, reject) => {
+    setTimeout(()=> {
+      if (n < 10) {
+        reject("获取数据失败");
+      } else {
+        resolve("获取成功的数据");
+      }
+    }, 1000)
+  })
+};
+Promise.retry(getData, 3)
+.then((result) => {
+  console.log("成功", result)
+})
+.catch((err) => {
+  console.log("失败", err)
+})
+
+
+const data = [
+  {
+    name: '11',
+    children: [
+      {
+        name: '12',
+        children: [
+          {
+            name: '13'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: '21',
+    children: [
+      {
+        name: '22',
+        children: [
+          {
+            name: '13',
+            shu: [
+              { 
+                name: "hahaha"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }    
+]
+// 写个方法 getAllNames 获取所有的 name 值, 返回数组，可以用 递归 和 非递归
+
+function getAllNames(data) {
+  let result = [];
+  for (let i = 0; i < data.length; i++) {
+    if (Array.isArray(data[i])) {
+      result = result.concat(getAllNames(arr[i]));
+    } else {
+      for (let key in data[i]) {
+        if (Array.isArray(data[i][key])) {
+          result = result.concat(getAllNames(data[i][key]));
+        }
+        if (key ===  "name") {
+          result.push(data[i][key])
+        }
+      }
+    }
+  }
+  return result;
+}
+console.log(getAllNames(data));
+
+
+const arr = [1,2,3];
+// reduce((acucumulator, currentValue, currentIndex, array) => {
+
+// }, initValue)
+const sum  = arr.reduce((accumulator, currentValue,  currentIndex, array) => {
+  return accumulator + currentValue
+});
+console.log(sum)
+
+
+const arr = [1,2,3];
+Array.prototype.myReduce = function (fn, initValue) {
+  for (let i = 0; i < this.length; i++) {
+    if (initValue !== 'undefined') {
+      initValue = fn(initValue, this[i], i, this);
+    } else {
+      initValue = fn(this[i], this[i + 1 ], i+1 , this);
+    }
+  }
+  return initValue;
+}
+
+/* reduce reduce方法有两个参数
+  * 第一个参数：回调函数 --> 每个参数都会调用回调函数
+  * 第二个参数： 初始值  --> 如果没有值，那么就是数组的第一个数 
+  * 回调函数有四个参数： accumulator-> 累计回调返回值， currentVlaue: 当前值， currentIdex： 当前下标，  最后是原数组
+*/
+
+const sum = arr.myReduce((accumulator, currentValue,  currentIndex, array) => {
+  return accumulator + currentValue
+}, 0);
+console.log(sum);
+
+
+const arr = [1,2,3];
+const result = arr.map((value, index, array) => {
+   return value  + 1;
+})
+console.log(result);
+Array.prototype.myMap = function (fn, context) {
+  const result = [];
+  const self = context || this;
+  for (let i = 0; i < self.length; i++) {
+    result.push(fn(self[i], i, self));    
+  }
+  return result;
+}
+const arr = [1,2,3];
+const arr2 = [2,3,4]
+
+const result = arr.myMap((value) => {
+  return value + 1;
+}, arr2);
+console.log(result);
+
+
+
+// 实现 多个 promise [p1, p2, p3], 并行执行，前一个promise执行完，才能执行下一个promise
+
+
+
+Promise.myAll = async function (PromiseArr) {
+    let i = 0 ;
+    while(i < PromiseArr.length) {
+      await PromiseArr[i];
+      i--;
+    }
+
+}
+
+async function promise_queue(list) {
+  let index = 0
+  while (index >= 0 && index < list.length) {
+      await list[index]()
+      index++
+  }
+}
+
+
+
+function fn1() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(1)
+      resolve(1);
+    }, 2000)
+  })
+}
+
+function fn2() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(2)
+      resolve(2);
+    }, 3000)
+  })
+}
+
+function  promise_queue(list) {
+  const result = [];
+  // 这个需要解释下，遍历数组，每次都把数组包在一个Promise.then()中，相当于list[0]().then(list[1]().then(list[2]().then(...))),
+  // 这样内层Promise依赖外层Promise的状态改变，从而实现逐个顺序执行的效果
+  return new Promise((resolve, reject) => {
+    let p = Promise.resolve();
+    list.forEach((promise) => {
+      p = p.then(promise).then((data) => {
+        result.push(data);
+        return result;
+      })
+    })
+    resolve(p);
+  })
+}
+promise_queue([fn1, fn2])
+.then((data) => {
+  console.log("完成", data)
+})
+
+
+
+
+
+
+
+
+
+async function promise_queue(list) {
+  const result = [];
+  return new Promise(async(resolve, reject) => {
+    let i = 0;
+    while(i < list.length) {
+      const res = await list[i]();
+      result.push(res);
+      i++
+    }
+    resolve(result);
+  })
+}
+promise_queue([fn1, fn2])
+.then((data) => {
+  console.log("完成", data)
+})
+
+
+
+// 实现一个方法 deepKey(obj, fn) 转换 obj 的key为大写
+
+  const obj = {
+    'name': 111,
+    'children': [
+      {
+        name: 1111
+      },
+      {
+        shu: 2222
+      }
+    ],
+    eat: ['apple']
+  }
+
+function deepKey(obj) {
+
+  if (Array.isArray(obj)) {
+    for (let i = 0; i < obj.length; i++) {
+      deepKey(obj[i])
+    }
+  } else if (typeof obj !== "string") {
+    for (const key in obj) {
+      obj[key.toUpperCase()] = obj[key];
+      delete obj[key];
+      if (Array.isArray(obj[key.toUpperCase()])) {
+        deepKey(obj[key.toUpperCase()])
+      }
+    }
+  }
+  return obj;
+}
+console.log(deepKey(obj))
+
+
+  // deepKey(obj, key => key.toLocaleUpperCase())
+  // 转化后为
+  const newObj = {
+    'NANME': 111,
+    'CHILDREN': [
+      {
+        'NAME': 1111
+      }
+    ],
+    'EAT': ['apple']
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+//  n 数之和 等于target
+
+
+function sum(arr, n, target) {
+  // 首先进行排序
+  arr.sort((cur, pre) => cur - pre);
+  
+}
+
+console.log(sum([1,2,3,6], 2, 3));
