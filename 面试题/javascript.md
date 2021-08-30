@@ -3988,7 +3988,7 @@ var salary = "1";
 
   var salary = "2";
 
-  console.log(2);
+  console.log(salary);
 })();
 // undefined 2
 ```
